@@ -1,0 +1,61 @@
+{
+  "name": "bagoesz21/laravel-notification",
+  "description": "Laravel notification wrapper",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "BEEP",
+      "email": "bgs.beep21@gmail.com",
+      "homepage": "https://github.com/bagoesz21",
+      "role": "Developer"
+    }
+  ],
+  "homepage": "https://github.com/bagoesz21/laravel-notification",
+  "keywords": [
+    "Laravel",
+    "LaravelNotification",
+    "Notification",
+    "php"
+  ],
+  "require": {
+    "php": "^7.3|^8.0",
+    "illuminate/support": "~7|~8|~9",
+    "bensampo/laravel-enum": "^4.0",
+    "tucker-eric/eloquentfilter": "^3.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~9.0",
+    "orchestra/testbench": "~7"
+  },
+  "suggest": {
+    "bagoesz21/laravel-notif-wa-web": "Notification to whatsapp channel",
+    "laravel-notification-channels/fcm": "Notification to Firebase Cloud Messaging (FCM) channel",
+    "laravel-notification-channels/onesignal": "Notification to OneSignal channel",
+    "laravel-notification-channels/webpush": "Notification to WebPush channel",
+    "laravel-notification-channels/pusher-push-notifications": "Notification to Pusher channel",
+    "laravel-notification-channels/telegram": "Notification to Telegram channel",
+    "laravel-notification-channels/twilio": "Notification to Twilio channel",
+    "laravel-notification-channels/authy": "Notification to Authy channel",
+    "laravel-notification-channels/webhook": "Notification to Webhook channel"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bagoesz21\\LaravelNotification\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bagoesz21\\LaravelNotification\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Bagoesz21\\LaravelNotification\\LaravelNotificationServiceProvider"
+      ],
+      "aliases": {
+        "LaravelNotification": "Bagoesz21\\LaravelNotification\\Facades\\LaravelNotification"
+      }
+    }
+  }
+}
