@@ -16,11 +16,6 @@ trait MailChannel
 
     protected $theme;
 
-    protected $tag;
-
-    /** @var array */
-    protected $metaData = [];
-
     /**
      * Init mail
      *
@@ -59,34 +54,6 @@ trait MailChannel
         return $this;
     }
 
-    /**
-     * Set tag
-     *
-     * @param string $tag
-     * @return self
-     */
-    public function setTag($tag)
-    {
-        $this->tag = $tag;
-        return $this;
-    }
-
-    /**
-     * Set meta data
-     *
-     * @param array $metaData
-     * Ex : [
-     *  'comment_id' => 123
-     * ]
-     * @return self
-     */
-    public function setMetaData($metaData)
-    {
-        if(empty($metaData))return $this;
-        $this->metaData = Arr::wrap($metaData);
-        return $this;
-    }
-
     public function toMail($notifiable)
     {
         $subject = $this->getTitle();
@@ -98,7 +65,18 @@ trait MailChannel
         $mail = (new MailMessage)->mailer($this->mailer);
         if(!empty($attachments)){
             foreach ($attachments as $key => $attachment) {
-                $mail = $mail->attach($attachment['url'], $attachment['options']);
+                $options = Arr::get($attachment, 'options', []);
+                $fromStorage = Arr::get($options, 'fromStorage', false);
+                $fileName = Arr::get($attachment, 'filename');
+                $fileMime = Arr::get($options, 'mime');
+
+                if($fromStorage){
+                    $mail = $mail->attachFromStorage($attachment['path'], $fileName, array_merge([], [
+                        'mime' => $fileMime
+                    ]));
+                }else{
+                    $mail = $mail->attach($attachment['url'], $options);
+                }
             }
         }
 

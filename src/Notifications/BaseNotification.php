@@ -20,6 +20,7 @@ class BaseNotification extends Notification implements ShouldQueue
     use Traits\HasActionNotificationTrait;
     use Traits\HasNotificationLevelTrait;
     use Traits\UseProseMirrorAsMessage;
+    use Traits\HasTagAndMetaData;
 
     use Formatters\MailChannel;
     use Formatters\BroadcastChannel;

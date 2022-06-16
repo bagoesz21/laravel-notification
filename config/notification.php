@@ -156,6 +156,7 @@ $enabledChannels = array_filter($channels, function($channel) {
 
 return [
     'connection' => $defaultQueueConnection,
+    'queue_name' => $defaultQueue,
     'after_commit' => (bool) env('NOTIF_AFTER_COMMIT', true),
     'locale' => config('app.locale'),
     'all' => $channels,
@@ -167,5 +168,9 @@ return [
         return ($channel['default'] === true);
     }), 'value'),
 
-    'utm' => $defaultUTM
+    'utm' => $defaultUTM,
+
+    'models' => [
+        'notification' => Bagoesz21\LaravelNotification\Models\Notification::class,
+    ]
 ];
