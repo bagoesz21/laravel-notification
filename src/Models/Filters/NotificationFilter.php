@@ -4,12 +4,11 @@ namespace Bagoesz21\LaravelNotification\Models\Filters;
 
 use EloquentFilter\ModelFilter;
 use Illuminate\Support\Arr;
-use App\Models\Filters\DefaultFilterDataTrait;
 use App\Models\Notification;
 
 class NotificationFilter extends ModelFilter
 {
-    use DefaultFilterDataTrait;
+    use Traits\DefaultFilterDataTrait;
 
     public $relations = [];
 

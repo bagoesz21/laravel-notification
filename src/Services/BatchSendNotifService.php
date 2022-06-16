@@ -10,6 +10,7 @@ use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\Bus;
 use Throwable;
 use App\Services\Alert\AlertResponse;
+use Illuminate\Support\Facades\Log;
 
 use Bagoesz21\LaravelNotification\Jobs\BatchNotifJob;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
@@ -109,8 +110,8 @@ class BatchSendNotifService {
     public function getDefaultBatchConfig(){
         return [
             'name' => "Send Notif To User",
-            'connection' => config('queue.default'),
-            'queue' => 'default',
+            'connection' => config('notification.connection'),
+            'queue' => config('notification.queue_name'),
             'allow_failures' => true,
         ];
     }
@@ -220,13 +221,13 @@ class BatchSendNotifService {
         ->then(function (Batch $batch) use($logName, $enableLog) {
 
             // if($enableLog){
-            //     \Log::info($logName . " Then", ['batch' => $batch]);
+            //     Log::info($logName . " Then", ['batch' => $batch]);
             // }
         })->catch(function (Batch $batch, Throwable $th) use($logName) {
-            \Log::error($logName . " Error", ['batch' => $batch, 'th' => $th]);
+            Log::error($logName . " Error", ['batch' => $batch, 'th' => $th]);
         })->finally(function (Batch $batch) use($logName, $enableLog) {
             // if($enableLog){
-            //     \Log::info($logName . " Finally", ['batch' => $batch]);
+            //     Log::info($logName . " Finally", ['batch' => $batch]);
             // }
         })
         ->name(Arr::get($this->batchConfig, 'name'))
@@ -239,7 +240,7 @@ class BatchSendNotifService {
         $deliveryAt = $this->getDeliveryAt();
 
         if($enableLog){
-            \Log::info("Batch " .$this->batch->id. " Logs", [
+            Log::info("Batch " .$this->batch->id. " Logs", [
                 'batch' => $this->batch,
                 'date'  => $now,
                 'notifConfig' => $this->notifConfig,
@@ -319,7 +320,7 @@ class BatchSendNotifService {
     {
         if(!$this->enableLog)return false;
 
-        \Log::info($logName, $stackTraces);
+        Log::info($logName, $stackTraces);
         return true;
     }
 }
