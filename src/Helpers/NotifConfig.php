@@ -162,7 +162,7 @@ class NotifConfig
         ->locale(Arr::get($config, 'locale'))
         ->channels(Arr::get($config, 'channels', []))
         ->other(Arr::except($config, [
-            'queue_name', 'connection', 'after_commit', 'locale', 'channels', 'utm', 'all', 'mandatory_channels', 'default_channels'
+            'queue_name', 'connection', 'after_commit', 'locale', 'channels', 'utm', 'all', 'mandatory_channels', 'default_channels', 'notifications'
         ]));
         return $this;
     }

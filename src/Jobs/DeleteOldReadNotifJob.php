@@ -28,7 +28,7 @@ class DeleteOldReadNotifJob implements
      */
     public function __construct()
     {
-        $this->notification = NotifHelper::getNotificationClass();
+        $this->notification = NotifHelper::getNotifModelClass();
     }
 
     /**

@@ -201,7 +201,7 @@ class NotificationRequest extends FormRequest
 
     private function allowedNotifTypes(){
 
-        $listNotificationType = NotifHelper::getNotificationClass()::listNotificationType();
+        $listNotificationType = NotifHelper::getNotifModelClass()::listNotificationType();
 
         $filtered = Arr::where($listNotificationType, function ($value, $key) {
             return in_array($value['class'], ['GeneralNotif']);

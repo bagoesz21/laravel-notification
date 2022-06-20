@@ -12,7 +12,6 @@ use Illuminate\View\View;
 
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
-use Bagoesz21\LaravelNotification\Notifications\Traits\HasUTMTrait;
 
 class BaseNotification extends Notification implements ShouldQueue
 {
@@ -21,13 +20,8 @@ class BaseNotification extends Notification implements ShouldQueue
     use Traits\HasChannels;
     use Traits\HasActionNotificationTrait;
     use Traits\HasNotificationLevelTrait;
-    use Traits\UseProseMirrorAsMessage;
     use Traits\HasTagAndMetaData;
     use Traits\HasUTMTrait;
-
-    use Formatters\MailChannel;
-    use Formatters\BroadcastChannel;
-    use Formatters\OneSignalChannel;
 
     protected $debug = false; //for debugging purpose
     public $enableLog = false;
@@ -232,7 +226,7 @@ class BaseNotification extends Notification implements ShouldQueue
         $this->setTitle($title)->setMessage($message)->setData($data)->setChannelsWithMandatory($notifChannels)->setLevel(NotificationLevel::INFO)->initChannel();
 
         // $this->afterInit();
-        $this->setMessageToProseMirror();
+        // $this->setMessageToProseMirror();
         return $this;
     }
 
@@ -270,7 +264,8 @@ class BaseNotification extends Notification implements ShouldQueue
     {
         $currentClass = (new \ReflectionClass(get_called_class()))->getShortName();
 
-        return Arr::first(NotifHelper::getNotificationClass()::listNotificationType(), function ($value, $key) use ($currentClass) {
+        return Arr::first(NotifHelper::getNotifModelClass()::listNotificationType(), function ($value, $key) use
+        ($currentClass) {
             return $value['class'] === $currentClass;
         });
     }

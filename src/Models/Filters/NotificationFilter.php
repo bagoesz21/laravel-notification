@@ -18,7 +18,7 @@ class NotificationFilter extends ModelFilter
     public function __construct($query, array $input = [], $relationsEnabled = true)
     {
         parent::__construct($query, $input, $relationsEnabled);
-        $this->model = NotifHelper::getNotificationClass();
+        $this->model = NotifHelper::getNotifModelClass();
     }
 
     private function getTableName(){

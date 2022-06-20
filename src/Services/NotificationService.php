@@ -20,7 +20,7 @@ class NotificationService
 
     public function __construct()
     {
-        $this->model = NotifHelper::getNotificationClass();
+        $this->model = NotifHelper::getNotifModelClass();
     }
     /**
      * Static make notification

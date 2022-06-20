@@ -25,7 +25,7 @@ class LaravelNotification
     /**
      * @return \Bagoesz21\LaravelNotification\Models\Notification
      */
-    public function notificationClass()
+    public function notifModelClass()
     {
         return app(config('notification.models.notification'));
     }
@@ -42,5 +42,14 @@ class LaravelNotification
     public function getConfig()
     {
         return NotifConfig::make()->translatedConfig(config('notification'));
+    }
+
+    /**
+     * @param string $notifKey
+     * @return \Bagoesz21\LaravelNotification\Models\Notification
+     */
+    public function notifClass($notifKey = 'system')
+    {
+        return app(config("notification.notifications.$notifKey", config("notification.notifications.system")));
     }
 }

@@ -135,6 +135,24 @@ $channels = [
     ],
 ];
 
+$others = [
+    'models' => [
+        'notification' => Bagoesz21\LaravelNotification\Models\Notification::class,
+    ],
+
+    'notifications' => [
+        'general' => Bagoesz21\LaravelNotification\Notifications\GeneralNotif::class,
+        'system' => Bagoesz21\LaravelNotification\Notifications\SystemNotif::class,
+    ],
+
+    'morph' => [
+        'enabled' => true,
+        'map' => [
+            'user' => 'App\Models\User',
+        ]
+    ]
+];
+
 return NotifConfig::make()
     ->queueName($defaultQueue)
     ->queueConnection($defaultQueueConnection)
@@ -142,16 +160,5 @@ return NotifConfig::make()
     ->locale(config('app.locale'))
     ->localize(false)
     ->channels($channels)
-    ->other([
-            'models' => [
-            'notification' => Bagoesz21\LaravelNotification\Models\Notification::class,
-        ],
-
-        'morph' => [
-            'enabled' => true,
-            'map' => [
-                'user' => 'App\Models\User',
-            ]
-        ]
-    ])
+    ->other($others)
     ->build();

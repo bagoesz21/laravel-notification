@@ -12,16 +12,16 @@ use Bagoesz21\LaravelNotification\Notifications\SystemNotif;
 use Bagoesz21\LaravelNotification\Jobs\SystemNotifJob;
 use Illuminate\Support\Facades\Auth;
 
-/**
- * Helper for send notif to user
- * - notify user immediately / schedule
- * - notify user after job queue done
- */
 class NotifHelper
 {
-    public static function getNotificationClass()
+    public static function getNotifModelClass()
     {
-        return LaravelNotification::make()->notificationClass();
+        return LaravelNotification::make()->notifModelClass();
+    }
+
+    public static function getNotifClass()
+    {
+        return LaravelNotification::make()->notifClass();
     }
 
     /**
