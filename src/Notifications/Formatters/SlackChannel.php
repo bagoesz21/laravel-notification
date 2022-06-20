@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\SlackMessage;
 /**
  * Notification to broadcast
  *
- * @see https://laravel.com/docs/8.x/notifications#slack-notifications
+ * @see https://laravel.com/docs/notifications#slack-notifications
  */
 trait SlackChannel
 {

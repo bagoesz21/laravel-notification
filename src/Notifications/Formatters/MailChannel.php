@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 /**
  * Notification to mail
  *
- * @see https://laravel.com/docs/8.x/notifications#mail-notifications
+ * @see https://laravel.com/docs/notifications#mail-notifications
  */
 trait MailChannel
 {

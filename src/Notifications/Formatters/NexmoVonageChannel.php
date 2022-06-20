@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\NexmoMessage;
 /**
  * Notification to nexmo / vonage
  *
- * @see https://laravel.com/docs/8.x/notifications#sms-notifications
+ * @see https://laravel.com/docs/notifications#sms-notifications
  */
 trait NexmoVonageChannel
 {

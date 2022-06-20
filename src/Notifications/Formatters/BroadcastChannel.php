@@ -8,7 +8,7 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 /**
  * Notification to broadcast
  *
- * @see https://laravel.com/docs/8.x/notifications#formatting-broadcast-notifications
+ * @see https://laravel.com/docs/notifications#formatting-broadcast-notifications
  */
 trait BroadcastChannel
 {

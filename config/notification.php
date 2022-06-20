@@ -17,7 +17,7 @@ use Illuminate\Support\Arr;
 | icon: icon notification
 | utm: Urchin Tracking Module (UTM) for notification
 |
-| @see https://laravel.com/docs/8.x/notifications/
+| @see https://laravel.com/docs/notifications/
 | @see https://laravel-notification-channels.com/
 */
 $packageName = "laravel-notification";
