@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
+use Bagoesz21\LaravelNotification\Notifications\Traits\HasUTMTrait;
 
 class BaseNotification extends Notification implements ShouldQueue
 {
@@ -21,6 +23,7 @@ class BaseNotification extends Notification implements ShouldQueue
     use Traits\HasNotificationLevelTrait;
     use Traits\UseProseMirrorAsMessage;
     use Traits\HasTagAndMetaData;
+    use Traits\HasUTMTrait;
 
     use Formatters\MailChannel;
     use Formatters\BroadcastChannel;
@@ -60,6 +63,22 @@ class BaseNotification extends Notification implements ShouldQueue
         $class = get_called_class();
         return (new $class())
         ->initNotif($title, $message, $data, $notifChannels);
+    }
+
+    public static function config() : array
+    {
+        return [];
+    }
+
+    /**
+     * Get config on this notification
+     *
+     * @param string|null $key
+     * @return array|string|int|null
+     */
+    public static function getConfig($key = null)
+    {
+        return Arr::get(get_called_class()::config(), $key);
     }
 
     /**
@@ -251,7 +270,7 @@ class BaseNotification extends Notification implements ShouldQueue
     {
         $currentClass = (new \ReflectionClass(get_called_class()))->getShortName();
 
-        return Arr::first(\App\Models\Notification::listNotificationType(), function ($value, $key) use ($currentClass) {
+        return Arr::first(NotifHelper::getNotificationClass()::listNotificationType(), function ($value, $key) use ($currentClass) {
             return $value['class'] === $currentClass;
         });
     }

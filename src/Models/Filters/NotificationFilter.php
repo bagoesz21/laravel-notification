@@ -4,7 +4,7 @@ namespace Bagoesz21\LaravelNotification\Models\Filters;
 
 use EloquentFilter\ModelFilter;
 use Illuminate\Support\Arr;
-use App\Models\Notification;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 
 class NotificationFilter extends ModelFilter
 {
@@ -12,8 +12,17 @@ class NotificationFilter extends ModelFilter
 
     public $relations = [];
 
+    /** @var \Bagoesz21\LaravelNotification\Models\Notification */
+    public $model;
+
+    public function __construct($query, array $input = [], $relationsEnabled = true)
+    {
+        parent::__construct($query, $input, $relationsEnabled);
+        $this->model = NotifHelper::getNotificationClass();
+    }
+
     private function getTableName(){
-        return Notification::getTableName();
+        return $this->model::getTableName();
     }
 
     public function users($users)
@@ -23,7 +32,7 @@ class NotificationFilter extends ModelFilter
 
     public function types($types)
     {
-        return $this->whereIn('type', Notification::getFullClassNotificationType($types));
+        return $this->whereIn('type', $this->model::getFullClassNotificationType($types));
     }
 
     public function readAt($readAt)

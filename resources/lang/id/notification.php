@@ -107,4 +107,13 @@ return [
         'cancelled_at' => 'dibatalkan pada'
     ],
 
+    'class' => [
+        'general' => [
+            'name' => "$table umum"
+        ],
+        'system' => [
+            'name' => "$table sistem"
+        ]
+    ]
+
 ];

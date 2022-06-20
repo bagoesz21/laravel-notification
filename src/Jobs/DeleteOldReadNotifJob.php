@@ -9,14 +9,17 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use Carbon\Carbon;
-use App\Models\Notification;
 
 class DeleteOldReadNotifJob implements
     ShouldQueue
     //, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    /** @var \Bagoesz21\LaravelNotification\Models\Notification */
+    public $notification;
 
     /**
      * Create a new job instance.
@@ -25,6 +28,7 @@ class DeleteOldReadNotifJob implements
      */
     public function __construct()
     {
+        $this->notification = NotifHelper::getNotificationClass();
     }
 
     /**
@@ -37,7 +41,7 @@ class DeleteOldReadNotifJob implements
         $dateEnd = Carbon::now();
         $dateStart = Carbon::now()->sub(3, "month");
 
-        Notification::where('read_at', '>=', $dateStart)
+        $this->notification->where('read_at', '>=', $dateStart)
             ->where('read_at', '<=', $dateEnd)->delete();
     }
 }

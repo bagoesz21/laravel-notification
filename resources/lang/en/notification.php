@@ -106,6 +106,15 @@ return [
         'send_at' => 'send at',
         'reschedule_at' => 'reschedule at',
         'cancelled_at' => 'cancelled at'
+    ],
+
+    'class' => [
+        'general' => [
+            'name' => "general $table",
+        ],
+        'system' => [
+            'name' => "system $table",
+        ]
     ]
 
 ];

@@ -4,15 +4,15 @@ namespace Bagoesz21\LaravelNotification\Models;
 
 use \Illuminate\Notifications\DatabaseNotification as Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Traits\BaseModelTrait;
 use Bagoesz21\LaravelNotification\Models\Collections\NotificationCollection;
 use EloquentFilter\Filterable;
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
+use Bagoesz21\LaravelNotification\Casts\JsonCast;
 
 class Notification extends Model
 {
     use HasFactory;
-    use BaseModelTrait;
+    use Traits\BaseModelTrait;
     use Traits\NotificationTrait;
     use Filterable;
 
@@ -20,7 +20,7 @@ class Notification extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'data' => \App\Casts\JsonCast::class,
+        'data' => JsonCast::class,
         'level' => NotificationLevel::class
     ];
 

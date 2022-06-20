@@ -6,10 +6,11 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Notification as NotificationFacade;
 
+use Bagoesz21\LaravelNotification\LaravelNotification;
 use App\Models\User;
 use Bagoesz21\LaravelNotification\Notifications\SystemNotif;
 use Bagoesz21\LaravelNotification\Jobs\SystemNotifJob;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Helper for send notif to user
@@ -18,6 +19,11 @@ use Auth;
  */
 class NotifHelper
 {
+    public static function getNotificationClass()
+    {
+        return LaravelNotification::make()->notificationClass();
+    }
+
     /**
      * Send Notif immediately / schedule
      *

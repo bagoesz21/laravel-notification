@@ -5,7 +5,7 @@ namespace Bagoesz21\LaravelNotification\Models\Traits;
 use Illuminate\Support\Arr;
 
 use App\Services\ProseMirror\Renderer;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 

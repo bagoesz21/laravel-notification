@@ -2,7 +2,7 @@
 
 namespace Bagoesz21\LaravelNotification\Services;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notification as LaravelNotification;
@@ -10,11 +10,18 @@ use Illuminate\Notifications\Notification as LaravelNotification;
 use Bagoesz21\LaravelNotification\Events\NotificationRead;
 use Bagoesz21\LaravelNotification\Events\NotificationReadAll;
 
-use App\Models\Notification;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use App\Models\User;
 
 class NotificationService
 {
+    /** @var \Bagoesz21\LaravelNotification\Models\Notification */
+    public $model;
+
+    public function __construct()
+    {
+        $this->model = NotifHelper::getNotificationClass();
+    }
     /**
      * Static make notification
      *
@@ -35,7 +42,7 @@ class NotificationService
         $notifID = $input->get('id');
         $notifID = is_array($notifID) ? $notifID : [$notifID];
 
-        $unread = Notification::where('notifiable_id', $userID)
+        $unread = $this->model::where('notifiable_id', $userID)
         ->whereNull('read_at')
         ->whereIn('id', $notifID)
         ->count();
@@ -44,7 +51,7 @@ class NotificationService
 
         $msg = "";
         if ($isUnread) {
-            Notification::where('notifiable_id', $userID)
+            $this->model::where('notifiable_id', $userID)
             ->whereNull('read_at')
             ->whereIn('id', $notifID)
             ->update(['read_at' => now()]);
@@ -63,7 +70,7 @@ class NotificationService
     {
         $userID = Auth::id();
 
-        $unread = Notification::where('notifiable_id', $userID)
+        $unread = $this->model::where('notifiable_id', $userID)
         ->whereNull('read_at')
         ->count();
 
@@ -71,7 +78,7 @@ class NotificationService
 
         $msg = "";
         if ($isUnread) {
-            Notification::where('notifiable_id', $userID)
+            $this->model::where('notifiable_id', $userID)
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
 
@@ -124,7 +131,7 @@ class NotificationService
     public function mergeUnreadNotifToAvoidSpam($notifiableId, $notifType, $uniqueID, $prefixResult = ""){
         if(empty($notifiableId) && empty($uniqueID))return '';
 
-        $unreadNotifInSameData = Notification::where('notifiable_id', $notifiableId)
+        $unreadNotifInSameData = $this->model::where('notifiable_id', $notifiableId)
             ->where('data->id', $uniqueID)
             ->where('data->notif_type', $notifType);
         $countUnreadNotifInSameData = $unreadNotifInSameData->count();

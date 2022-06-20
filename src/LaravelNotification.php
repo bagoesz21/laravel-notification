@@ -2,6 +2,9 @@
 
 namespace Bagoesz21\LaravelNotification;
 
+use Illuminate\Support\Arr;
+use Bagoesz21\LaravelNotification\Helpers\NotifConfig;
+
 class LaravelNotification
 {
     /**
@@ -14,7 +17,30 @@ class LaravelNotification
 
     public function init()
     {
+        $this->morphMap();
         $this->app->instance(\Illuminate\Notifications\Channels\DatabaseChannel::class, new
         Channels\DatabaseChannel());
+    }
+
+    /**
+     * @return \Bagoesz21\LaravelNotification\Models\Notification
+     */
+    public function notificationClass()
+    {
+        return app(config('notification.models.notification'));
+    }
+
+    /**
+     * @return array
+     */
+    public function morphMap()
+    {
+        if(!config('notification.morph.enabled'))return [];
+        return \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap(config('notification.morph_map'));
+    }
+
+    public function getConfig()
+    {
+        return NotifConfig::make()->translatedConfig(config('notification'));
     }
 }

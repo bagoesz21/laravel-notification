@@ -1,6 +1,6 @@
 <?php
 
-namespace Bagoesz21\LaravelNotification\Notifications\Traits;
+namespace Bagoesz21\LaravelNotification\Models\Traits;
 
 trait HasRouteNotificationTrait
 {

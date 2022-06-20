@@ -8,6 +8,8 @@ use Illuminate\Support\Arr;
 use App\Rules\RequiredContentProseMirrorRule;
 use BenSampo\Enum\Rules\EnumValue;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
+use Bagoesz21\LaravelNotification\Helpers\Helper;
 
 class NotificationRequest extends FormRequest
 {
@@ -101,7 +103,7 @@ class NotificationRequest extends FormRequest
             ];
         }
 
-        $userCriteriaRules = appendArrayKey($userCriteriaRules, 'criteria');
+        $userCriteriaRules = Helper::appendArrayKey($userCriteriaRules, 'criteria');
 
         $channelRules = [
             'channels' => 'required|array|in:' . implode(",", $this->channelLists)
@@ -113,11 +115,11 @@ class NotificationRequest extends FormRequest
 
         $rules = array_merge(
             $rules,
-            appendArrayKey($notifRules, 'notif'),
-            appendArrayKey($userRules, 'users'),
-            appendArrayKey($userCriteriaRules, 'users'),
+            Helper::appendArrayKey($notifRules, 'notif'),
+            Helper::appendArrayKey($userRules, 'users'),
+            Helper::appendArrayKey($userCriteriaRules, 'users'),
             $channelRules,
-            appendArrayKey($deliveryRules, 'delivery'),
+            Helper::appendArrayKey($deliveryRules, 'delivery'),
 
         );
         //dd($rules);
@@ -199,9 +201,9 @@ class NotificationRequest extends FormRequest
 
     private function allowedNotifTypes(){
 
-        $listNotificationType = \App\Models\Notification::listNotificationType();
+        $listNotificationType = NotifHelper::getNotificationClass()::listNotificationType();
 
-        $filtered = \Arr::where($listNotificationType, function ($value, $key) {
+        $filtered = Arr::where($listNotificationType, function ($value, $key) {
             return in_array($value['class'], ['GeneralNotif']);
         });
         return implode(",", Arr::pluck($filtered, "class"));

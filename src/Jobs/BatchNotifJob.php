@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Notification as NotificationFacade;
 use Carbon\Carbon;
 
 use App\Models\User;
-use App\Helpers\NotifHelper;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 
 class BatchNotifJob implements
     ShouldQueue
