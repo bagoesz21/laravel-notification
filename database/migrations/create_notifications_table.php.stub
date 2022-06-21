@@ -1,13 +1,21 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 
 class CreateNotificationsTable extends Migration
 {
+    protected $notifConfig;
+
+    public function __construct()
+    {
+        $this->notifConfig = NotifConfig::make();
+    }
+
     /**
      * Run the migrations.
      *
@@ -15,7 +23,7 @@ class CreateNotificationsTable extends Migration
      */
     public function up()
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create($this->notifConfig->get('tables.notification.table_name') ?? 'notifications', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('type');
             $table->morphs('notifiable');
@@ -46,6 +54,6 @@ class CreateNotificationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notifications');
+        Schema::dropIfExists($this->notifConfig->get('tables.notification.table_name'));
     }
 }

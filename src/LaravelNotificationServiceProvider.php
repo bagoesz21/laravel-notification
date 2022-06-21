@@ -3,6 +3,8 @@
 namespace Bagoesz21\LaravelNotification;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Collection;
+use Illuminate\Filesystem\Filesystem;
 
 class LaravelNotificationServiceProvider extends ServiceProvider
 {
@@ -77,7 +79,31 @@ class LaravelNotificationServiceProvider extends ServiceProvider
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/laravel-notification'),
         ], 'laravel-notification.lang');
 
+        $this->publishes([
+            __DIR__.'/../database/migrations/create_notifications_table.php.stub' =>
+            $this->getMigrationFileName('create_notifications_table.php'),
+        ], 'migrations');
+
         // Registering package commands.
         // $this->commands([]);
+    }
+
+    /**
+     * Returns existing migration file if found, else uses the current timestamp.
+     *
+     * @return string
+     */
+    protected function getMigrationFileName($migrationFileName): string
+    {
+        $timestamp = date('Y_m_d_His');
+
+        $filesystem = $this->app->make(Filesystem::class);
+
+        return Collection::make($this->app->databasePath().DIRECTORY_SEPARATOR.'migrations'.DIRECTORY_SEPARATOR)
+            ->flatMap(function ($path) use ($filesystem, $migrationFileName) {
+                return $filesystem->glob($path.'*_'.$migrationFileName);
+            })
+            ->push($this->app->databasePath()."/migrations/{$timestamp}_{$migrationFileName}")
+            ->first();
     }
 }
