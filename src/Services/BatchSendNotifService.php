@@ -12,6 +12,7 @@ use Throwable;
 use App\Services\Alert\AlertResponse;
 use Illuminate\Support\Facades\Log;
 
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 use Bagoesz21\LaravelNotification\Jobs\BatchNotifJob;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
 use App\Models\User;
@@ -43,18 +44,8 @@ class BatchSendNotifService {
         $this->response = new AlertResponse;
 
         $this->enableLog  = (config('app.env') <> 'production') ? true : false;
-    }
 
-    /**
-     * Set other notif config
-     *
-     * @param array $config
-     * @return self
-     */
-    public function setNotifConfig($config){
-        $this->notifConfig = $config;
-
-        return $this;
+        $this->notifConfig = NotifConfig::make();
     }
 
     /**
@@ -110,8 +101,8 @@ class BatchSendNotifService {
     public function getDefaultBatchConfig(){
         return [
             'name' => "Send Notif To User",
-            'connection' => config('notification.connection'),
-            'queue' => config('notification.queue_name'),
+            'connection' => $this->notifConfig->get('connection'),
+            'queue' => $this->notifConfig->get('queue_name'),
             'allow_failures' => true,
         ];
     }
@@ -243,7 +234,6 @@ class BatchSendNotifService {
             Log::info("Batch " .$this->batch->id. " Logs", [
                 'batch' => $this->batch,
                 'date'  => $now,
-                'notifConfig' => $this->notifConfig,
                 'deliveryConfig' => [
                     'deliveryTimeStatus' => $deliveryTimeStatus,
                     'deliveryAt' => $deliveryAt

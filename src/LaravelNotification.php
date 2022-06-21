@@ -3,16 +3,27 @@
 namespace Bagoesz21\LaravelNotification;
 
 use Illuminate\Support\Arr;
-use Bagoesz21\LaravelNotification\Helpers\NotifConfig;
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class LaravelNotification
 {
+    protected $mapper;
+
+    protected $config;
+
     /**
      * @return self
      */
     public static function make()
     {
         return (new self());
+    }
+
+    public function __construct()
+    {
+        $mapperClass = config('notification.mapper');
+        $this->setMapper($mapperClass);
+        $this->config = NotifConfig::make($mapperClass);
     }
 
     public function init()
@@ -22,12 +33,18 @@ class LaravelNotification
         Channels\DatabaseChannel());
     }
 
+    public function setMapper($mapper)
+    {
+        $this->mapper = app($mapper);
+        return $this;
+    }
+
     /**
      * @return \Bagoesz21\LaravelNotification\Models\Notification
      */
     public function notifModelClass()
     {
-        return app(config('notification.models.notification'));
+        return app($this->config->get('tables.notification.models'));
     }
 
     /**
@@ -35,13 +52,13 @@ class LaravelNotification
      */
     public function morphMap()
     {
-        if(!config('notification.morph.enabled'))return [];
-        return \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap(config('notification.morph_map'));
+        if(!$this->config->get('morph.enabled'))return [];
+        return \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap($this->config->get('morph.map'));
     }
 
     public function getConfig()
     {
-        return NotifConfig::make()->translatedConfig(config('notification'));
+        return $this->config;
     }
 
     /**
@@ -50,6 +67,7 @@ class LaravelNotification
      */
     public function notifClass($notifKey = 'system')
     {
-        return app(config("notification.notifications.$notifKey", config("notification.notifications.system")));
+        return app($this->config->get("notifications.$notifKey"),
+        $this->config->get("notification.notifications.system"));
     }
 }

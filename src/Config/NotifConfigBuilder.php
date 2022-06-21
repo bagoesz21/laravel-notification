@@ -1,10 +1,10 @@
 <?php
 
-namespace Bagoesz21\LaravelNotification\Helpers;
+namespace Bagoesz21\LaravelNotification\Config;
 
 use Illuminate\Support\Arr;
 
-class NotifConfig
+class NotifConfigBuilder
 {
     protected $defaultChannel = [];
     protected $queueName = 'default';
@@ -49,6 +49,10 @@ class NotifConfig
         return $this;
     }
 
+    /**
+     * @param boolean $val
+     * @return self
+     */
     public function afterCommit($val)
     {
         $this->afterCommit = $val;
@@ -85,6 +89,10 @@ class NotifConfig
         return $this;
     }
 
+    /**
+     * @param array $channels
+     * @return self
+     */
     public function channels($channels)
     {
         $channels = array_map(function($channel) {
@@ -94,7 +102,11 @@ class NotifConfig
         return $this;
     }
 
-    public function mapChannel($config)
+    /**
+     * @param array $config
+     * @return array
+     */
+    public function mapChannel($config): array
     {
         $channels = array_map(function($channel){
             return array_merge($this->defaultChannel, $channel);
@@ -116,13 +128,17 @@ class NotifConfig
         ]);
     }
 
+    /**
+     * @param array $val
+     * @return self
+     */
     public function other($val)
     {
         $this->other = $val;
         return $this;
     }
 
-    public function buildMinimal()
+    public function buildMinimal(): array
     {
         return array_merge([
             'connection' => $this->queueConnection,
@@ -135,12 +151,19 @@ class NotifConfig
         ], $this->other);
     }
 
-    public function build()
+    /**
+     * @return array
+     */
+    public function build(): array
     {
         return array_merge($this->mapChannel($this->buildMinimal()));
     }
 
-    public function translateChannels($channels)
+    /**
+     * @param array $channels
+     * @return array
+     */
+    public function translateChannels($channels): array
     {
         if(!$this->localize)return $channels;
         $packageName = "laravel-notification";
@@ -154,6 +177,10 @@ class NotifConfig
         }, $channels, array_keys($channels));
     }
 
+    /**
+     * @param array $config
+     * @return self
+     */
     public function config($config)
     {
         $this->queueName(Arr::get($config, 'queue_name'))
@@ -162,12 +189,17 @@ class NotifConfig
         ->locale(Arr::get($config, 'locale'))
         ->channels(Arr::get($config, 'channels', []))
         ->other(Arr::except($config, [
-            'queue_name', 'connection', 'after_commit', 'locale', 'channels', 'utm', 'all', 'mandatory_channels', 'default_channels', 'notifications'
+            'queue_name', 'connection', 'after_commit', 'locale', 'channels', 'utm', 'all', 'mandatory_channels', 'default_channels',
+            'tables', 'notifications'
         ]));
         return $this;
     }
 
-    public function translatedConfig($config)
+    /**
+     * @param array $config
+     * @return array
+     */
+    public function translatedConfig($config): array
     {
         return $this->localize(true)->config($config)->build();
     }

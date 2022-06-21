@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Arr;
-use Bagoesz21\LaravelNotification\Helpers\NotifConfig;
+use Bagoesz21\LaravelNotification\Config\NotifConfigBuilder;
 
 /*
 |--------------------------------------------------------------------------
@@ -136,8 +136,15 @@ $channels = [
 ];
 
 $others = [
-    'models' => [
-        'notification' => Bagoesz21\LaravelNotification\Models\Notification::class,
+    'tables' => [
+        'notification' => [
+            'model' => Bagoesz21\LaravelNotification\Models\Notification::class,
+
+            /**
+             * Default null, for default table name
+             */
+            'table_name' => null,
+        ]
     ],
 
     'notifications' => [
@@ -150,10 +157,18 @@ $others = [
         'map' => [
             'user' => 'App\Models\User',
         ]
-    ]
+    ],
+
+    /**
+     * If you want custom config notif, before notif initialize.
+     * For example if you need load stored config in database,
+     * load config and mapping config with mapper config class.
+     * Default: load from config.
+     */
+    'mapper' => Bagoesz21\LaravelNotification\Config\Mapper\NotifMapperConfig::class,
 ];
 
-return NotifConfig::make()
+return NotifConfigBuilder::make()
     ->queueName($defaultQueue)
     ->queueConnection($defaultQueueConnection)
     ->afterCommit((bool) env('NOTIF_AFTER_COMMIT', true))

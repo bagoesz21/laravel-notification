@@ -12,6 +12,7 @@ use Illuminate\View\View;
 
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class BaseNotification extends Notification implements ShouldQueue
 {
@@ -23,6 +24,7 @@ class BaseNotification extends Notification implements ShouldQueue
     use Traits\HasTagAndMetaData;
     use Traits\HasUTMTrait;
 
+    protected $notifConfig;
     protected $debug = false; //for debugging purpose
     public $enableLog = false;
 
@@ -41,6 +43,7 @@ class BaseNotification extends Notification implements ShouldQueue
      */
     public function __construct()
     {
+        $this->notifConfig = NotifConfig::make();
     }
 
     /**
@@ -215,13 +218,13 @@ class BaseNotification extends Notification implements ShouldQueue
     public function initNotif($title = null, $message = null, $data = [], $notifChannels = [])
     {
         $this->setDebug(config('app.debug'));
-        $this->onConnection(config('notification.connection'));
+        $this->onConnection($this->notifConfig->get('connection'));
 
-        if(config('notification.after_commit')){
+        if($this->notifConfig->get('after_commit')){
             $this->afterCommit();
         }
 
-        $this->locale(config('notification.locale'));
+        $this->locale($this->notifConfig->get('locale'));
 
         $this->setTitle($title)->setMessage($message)->setData($data)->setChannelsWithMandatory($notifChannels)->setLevel(NotificationLevel::INFO)->initChannel();
 

@@ -8,6 +8,7 @@ use Bagoesz21\LaravelNotification\Models\Collections\NotificationCollection;
 use EloquentFilter\Filterable;
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 use Bagoesz21\LaravelNotification\Casts\JsonCast;
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class Notification extends Model
 {
@@ -23,6 +24,16 @@ class Notification extends Model
         'data' => JsonCast::class,
         'level' => NotificationLevel::class
     ];
+
+    public function getTable()
+    {
+        $tableName = NotifConfig::make()->get('tables.notification.table_name', null);
+
+        if(is_null($tableName)){
+            $tableName = parent::getTable();
+        }
+        return $tableName;
+    }
 
     public function newCollection(array $models = [])
     {

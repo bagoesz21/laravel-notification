@@ -10,10 +10,12 @@ use BenSampo\Enum\Rules\EnumValue;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use Bagoesz21\LaravelNotification\Helpers\Helper;
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class NotificationRequest extends FormRequest
 {
     protected $channelLists = [];
+    protected $notifConfig;
 
     protected $userNotif = [
         1 => [
@@ -55,7 +57,8 @@ class NotificationRequest extends FormRequest
 
     public function __construct()
     {
-        $this->channelLists = Arr::pluck(config('notification.channels'), 'value');
+        $this->notifConfig = NotifConfig::make();
+        $this->channelLists = Arr::pluck($this->notifConfig->get('channels'), 'value');
     }
 
     /**

@@ -16,7 +16,7 @@ trait HasChannels
     */
     public function listChannels()
     {
-        return config('notification.channels');
+        return $this->notifConfig->get('channels');
     }
 
     /**
@@ -26,7 +26,7 @@ trait HasChannels
     */
     public function listMandatoryChannels()
     {
-        return config('notification.mandatory_channels');
+        return $this->notifConfig->get('mandatory_channels');
     }
 
     /**
@@ -46,7 +46,7 @@ trait HasChannels
     */
     public function listDefaultChannels()
     {
-        return config('notification.default_channels');
+        return $this->notifConfig->get('default_channels');
     }
 
     /**
