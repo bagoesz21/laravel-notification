@@ -3,6 +3,7 @@
 namespace Bagoesz21\LaravelNotification;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class LaravelNotification
@@ -29,7 +30,7 @@ class LaravelNotification
     public function init()
     {
         $this->morphMap();
-        $this->app->instance(\Illuminate\Notifications\Channels\DatabaseChannel::class, new
+        App::instance(\Illuminate\Notifications\Channels\DatabaseChannel::class, new
         Channels\DatabaseChannel());
     }
 
