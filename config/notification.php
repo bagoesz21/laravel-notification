@@ -146,7 +146,7 @@ $others = [
         ],
         'notification_template' => [
             /**
-             * Set enabled true, if you want log notification
+             * Set enabled true, if you want use template notification
              */
             'enabled' => false,
             'model' => Bagoesz21\LaravelNotification\Models\NotificationTemplate::class,

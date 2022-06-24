@@ -92,9 +92,10 @@ return [
     'template' => [
         'locale' => $tableTemplate,
 
-        'id' => "$tableSchedule id",
-        'title' => "$tableSchedule title",
-        'message' => "$tableSchedule message",
+        'id' => "$tableTemplate id",
+        'name' => "$tableTemplate name",
+        'title' => "$tableTemplate title",
+        'message' => "$tableTemplate message",
     ],
 
     'schedule' => [

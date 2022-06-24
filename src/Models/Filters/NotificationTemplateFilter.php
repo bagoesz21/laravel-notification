@@ -12,7 +12,7 @@ class NotificationTemplateFilter extends ModelFilter
 
     public $relations = [];
 
-    /** @var \Bagoesz21\LaravelNotification\Models\NotificationLog */
+    /** @var \Bagoesz21\LaravelNotification\Models\NotificationTemplate */
     public $model;
 
     public function __construct($query, array $input = [], $relationsEnabled = true)
