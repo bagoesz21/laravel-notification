@@ -3,11 +3,28 @@
 namespace Bagoesz21\LaravelNotification\Models\Traits;
 
 use DateTimeInterface;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
 
 trait BaseModelTrait
 {
+    /**
+     * Query scope truncate text in column
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $q
+     * @param string $col
+     * @param int $limit
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeSelectColTruncated($q, $col, $limit = 100)
+    {
+        $qry_truncated = "SUBSTRING(".$col.",1, ".$limit.")";
+        $query = "case when length(".$col.") > ".$limit."
+                    then concat(".$qry_truncated.", ' ...')
+                    else ".$col." end as ".$col.'_truncated';
+        return $q->addSelect(\DB::raw($query));
+    }
+
     protected function serializeDate(DateTimeInterface $date)
     {
         return $date->format('Y-m-d H:i:s');
@@ -83,22 +100,54 @@ trait BaseModelTrait
 
     public function scopeSelectDefault($q)
     {
-        return $q->addSelect(self::getTableName().'.id', 'name');
+        return $q->addSelect(self::getTablePrimaryKeyName(), 'name');
+    }
+
+    private function isUsesTimestamps()
+    {
+        if(!in_array(HasTimestamps::class, class_uses_recursive(get_called_class()), true))return false;
+
+        return !$this->usesTimestamps();
     }
 
     public function scopeSelectTimestamp($q)
     {
+        if(!$this->isUsesTimestamps())return $q;
+
         return $q->addSelect(
-            !empty($this->CREATED_AT) ? $this->CREATED_AT : 'created_at',
-            !empty($this->UPDATED_AT) ? $this->CREATED_AT : 'updated_at'
+            $this->getCreatedAtColumn(),
+            $this->getUpdatedAtColumn(),
         );
+    }
+
+    public function getCreatedAtAgoHumanAttribute()
+    {
+        if(!$this->isUsesTimestamps())return null;
+        return \Carbon\Carbon::parse($this->created_at)->diffForHumans();
+    }
+
+    public function getUpdatedAtAgoHumanAttribute()
+    {
+        if(!$this->isUsesTimestamps())return null;
+        return \Carbon\Carbon::parse($this->updated_at)->diffForHumans();
+    }
+
+    private function isUsesSoftDelete()
+    {
+        return in_array(SoftDeletes::class, class_uses_recursive(get_called_class()), true);
+    }
+
+    public function getDeletedAtAgoHumanAttribute()
+    {
+        if(!$this->isUsesSoftDelete())return null;
+        return \Carbon\Carbon::parse($this->deleted_at)->diffForHumans();
     }
 
     public function scopeSelectSoftDelete($q)
     {
-        return $q->addSelect(
-            !empty($this->DELETED_AT) ? $this->deleted_at: 'deleted_at'
-        );
+        if(!$this->isUsesSoftDelete())return $q;
+        if(!in_array(SoftDeletes::class, class_uses_recursive(get_called_class()), true))return $q;
+        return $q->addSelect($this->getDeletedAtColumn());
     }
 
     public function scopeSelectDataDate($q)
@@ -115,32 +164,19 @@ trait BaseModelTrait
      */
     public function scopeSelectRowNumber($query, $alias = "no")
     {
-        DB::statement(DB::raw('set @row=0'));
+        $conn = $this->getConnection();
 
-        return $query->addSelect(DB::raw('@row:=@row+1 as '.$alias));
-    }
-
-    public function getCreatedAtAgoHumanAttribute()
-    {
-        if (empty($this->created_at)) {
-            return;
+        $selectRawRowNumber = null;
+        if( $conn instanceOf \Illuminate\Database\PostgresConnection){
+            $selectRawRowNumber = \DB::raw("row_number() over()");
+        } else if( $conn instanceOf \Illuminate\Database\MySqlConnection) {
+            \DB::statement(\DB::raw('set @row=0'));
+            $selectRawRowNumber = \DB::raw("@row:=@row+1 as 'row_number'");
         }
-        return Carbon::parse($this->created_at)->diffForHumans();
-    }
 
-    public function getUpdatedAtAgoHumanAttribute()
-    {
-        if (empty($this->updated_at)) {
-            return;
-        }
-        return Carbon::parse($this->updated_at)->diffForHumans();
-    }
+        if($selectRawRowNumber)return $query;
 
-    public function getDeletedAtAgoHumanAttribute()
-    {
-        if (empty($this->deleted_at)) {
-            return;
-        }
-        return Carbon::parse($this->deleted_at)->diffForHumans();
+        return $query->addSelect($selectRawRowNumber);
     }
 }
+
