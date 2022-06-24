@@ -21,7 +21,6 @@ use Bagoesz21\LaravelNotification\Config\NotifConfigBuilder;
 | @see https://laravel.com/docs/notifications/
 | @see https://laravel-notification-channels.com/
 */
-$packageName = "laravel-notification";
 $defaultQueue = env('NOTIF_QUEUE_NAME', 'default');
 $defaultQueueConnection = env('NOTIF_QUEUE_CONNECTION', env('QUEUE_CONNECTION', 'redis'));
 
@@ -139,6 +138,18 @@ $others = [
     'tables' => [
         'notification' => [
             'model' => Bagoesz21\LaravelNotification\Models\Notification::class,
+
+            /**
+             * Default null, for default table name
+             */
+            'table_name' => null,
+        ],
+        'notification_template' => [
+            /**
+             * Set enabled true, if you want log notification
+             */
+            'enabled' => false,
+            'model' => Bagoesz21\LaravelNotification\Models\NotificationTemplate::class,
 
             /**
              * Default null, for default table name

@@ -71,6 +71,14 @@ class LaravelNotification
     }
 
     /**
+     * @return \Bagoesz21\LaravelNotification\Models\NotificationTemplate
+     */
+    public function notifTemplateModelClass()
+    {
+        return app($this->config->get('tables.notification_template.models'));
+    }
+
+    /**
      * @param string $notifKey
      * @return \Bagoesz21\LaravelNotification\Models\Notification
      */

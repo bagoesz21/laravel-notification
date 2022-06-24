@@ -95,10 +95,19 @@ class LaravelNotificationServiceProvider extends ServiceProvider
             __DIR__.'/../database/migrations/create_notifications_table.php.stub' =>
             $this->getMigrationFileName('create_notifications_table.php')
         ];
-        if (NotifConfig::make()->get('tables.notification_log.enabled', false)){
+
+        $notifConfig = NotifConfig::make();
+        if ($notifConfig->get('tables.notification_log.enabled', false)){
             $migrations = array_merge($migrations, [
                 __DIR__.'/../database/migrations/create_notification_logs_table.php.stub' =>
                 $this->getMigrationFileName('create_notification_logs_table.php'),
+            ]);
+        }
+
+        if ($notifConfig->get('tables.notification_template.enabled', false)){
+            $migrations = array_merge($migrations, [
+                __DIR__.'/../database/migrations/create_notification_templates_table.php.stub' =>
+                $this->getMigrationFileName('create_notification_templates_table.php'),
             ]);
         }
 
