@@ -19,6 +19,11 @@ class NotifHelper
         return LaravelNotification::make()->notifModelClass();
     }
 
+    public static function getNotifLogModelClass()
+    {
+        return LaravelNotification::make()->notifLogModelClass();
+    }
+
     public static function getNotifClass()
     {
         return LaravelNotification::make()->notifClass();

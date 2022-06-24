@@ -5,6 +5,7 @@ namespace Bagoesz21\LaravelNotification;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Collection;
 use Illuminate\Filesystem\Filesystem;
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 
 class LaravelNotificationServiceProvider extends ServiceProvider
 {
@@ -79,13 +80,29 @@ class LaravelNotificationServiceProvider extends ServiceProvider
             __DIR__.'/../resources/lang' => resource_path('lang/vendor/laravel-notification'),
         ], 'laravel-notification.lang');
 
-        $this->publishes([
-            __DIR__.'/../database/migrations/create_notifications_table.php.stub' =>
-            $this->getMigrationFileName('create_notifications_table.php'),
-        ], 'migrations');
+        $this->publishMigrations();
 
         // Registering package commands.
         // $this->commands([]);
+    }
+
+    /**
+     * @return void
+     */
+    protected function publishMigrations()
+    {
+        $migrations = [
+            __DIR__.'/../database/migrations/create_notifications_table.php.stub' =>
+            $this->getMigrationFileName('create_notifications_table.php')
+        ];
+        if (NotifConfig::make()->get('tables.notification_log.enabled', false)){
+            $migrations = array_merge($migrations, [
+                __DIR__.'/../database/migrations/create_notification_logs_table.php.stub' =>
+                $this->getMigrationFileName('create_notification_logs_table.php'),
+            ]);
+        }
+
+        $this->publishes($migrations, 'migrations');
     }
 
     /**

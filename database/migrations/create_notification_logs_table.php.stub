@@ -1,0 +1,59 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
+
+class CreateNotificationLogsTable extends Migration
+{
+    protected $notifConfig;
+
+    public function __construct()
+    {
+        $this->notifConfig = NotifConfig::make();
+    }
+
+    protected function isEnabled()
+    {
+        return $this->notifConfig->get('tables.notification_log.enabled', false);
+    }
+
+    /**
+     * Run the migrations.
+     *
+     * @return bool
+     */
+    public function up()
+    {
+        if(!$this->isEnabled())return false;
+
+        Schema::create($this->notifConfig->get('tables.notification_log.table_name') ?? 'notification_logs', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+
+            $table->string('notification_type')->nullable();
+            $table->morphs('notifiable');
+
+            $table->dateTime('sent_at')->nullable();
+            $table->dateTime('failed_at')->nullable();
+
+            $table->dateTime('opened_at')->nullable();
+
+            $table->timestamps();
+        });
+        return true;
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        if(!$this->isEnabled())return false;
+        Schema::dropIfExists($this->notifConfig->get('tables.notification_log.table_name'));
+    }
+}

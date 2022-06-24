@@ -144,6 +144,18 @@ $others = [
              * Default null, for default table name
              */
             'table_name' => null,
+        ],
+        'notification_log' => [
+            /**
+             * Set enabled true, if you want log notification
+             */
+            'enabled' => false,
+            'model' => Bagoesz21\LaravelNotification\Models\NotificationLog::class,
+
+            /**
+             * Default null, for default table name
+             */
+            'table_name' => null,
         ]
     ],
 
@@ -152,6 +164,9 @@ $others = [
         'system' => Bagoesz21\LaravelNotification\Notifications\SystemNotif::class,
     ],
 
+    /**
+     * @see https://laravel.com/docs/eloquent-relationships#custom-polymorphic-types
+     */
     'morph' => [
         'enabled' => true,
         'map' => [

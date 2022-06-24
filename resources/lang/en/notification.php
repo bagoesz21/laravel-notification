@@ -2,6 +2,7 @@
 
 $table = 'notification';
 $tableSchedule = "$table schedule";
+$tableLog = "$table log";
 $tableTemplate = "$table template";
 
 return [
@@ -106,6 +107,16 @@ return [
         'send_at' => 'send at',
         'reschedule_at' => 'reschedule at',
         'cancelled_at' => 'cancelled at'
+    ],
+
+    'log' => [
+        'locale' => $tableLog,
+
+        'id' => "$tableLog id",
+        'notification_type' => "$tableLog type",
+        'send_at' => 'send at',
+        'failed_at' => 'failed at',
+        'opened_at' => 'opened at',
     ],
 
     'class' => [

@@ -2,6 +2,7 @@
 
 $table = 'notifikasi';
 $tableSchedule = "jadwal $table";
+$tableLog = "log $table";
 $tableTemplate = "template $table";
 
 return [
@@ -105,6 +106,16 @@ return [
         'send_at' => 'dikirim pada',
         'reschedule_at' => 'dikirim ulang pada',
         'cancelled_at' => 'dibatalkan pada'
+    ],
+
+    'log' => [
+        'locale' => $tableLog,
+
+        'id' => "id $tableLog",
+        'notification_type' => "tipe $tableLog",
+        'send_at' => 'dikirim pada',
+        'failed_at' => 'gagal pada',
+        'opened_at' => 'dibuka pada',
     ],
 
     'class' => [

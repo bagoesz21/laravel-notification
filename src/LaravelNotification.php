@@ -41,14 +41,6 @@ class LaravelNotification
     }
 
     /**
-     * @return \Bagoesz21\LaravelNotification\Models\Notification
-     */
-    public function notifModelClass()
-    {
-        return app($this->config->get('tables.notification.models'));
-    }
-
-    /**
      * @return array
      */
     public function morphMap()
@@ -63,12 +55,28 @@ class LaravelNotification
     }
 
     /**
+     * @return \Bagoesz21\LaravelNotification\Models\Notification
+     */
+    public function notifModelClass()
+    {
+        return app($this->config->get('tables.notification.models'));
+    }
+
+    /**
+     * @return \Bagoesz21\LaravelNotification\Models\NotificationLog
+     */
+    public function notifLogModelClass()
+    {
+        return app($this->config->get('tables.notification_log.models'));
+    }
+
+    /**
      * @param string $notifKey
      * @return \Bagoesz21\LaravelNotification\Models\Notification
      */
     public function notifClass($notifKey = 'system')
     {
         return app($this->config->get("notifications.$notifKey"),
-        $this->config->get("notification.notifications.system"));
+        $this->config->get("notifications.system"));
     }
 }
