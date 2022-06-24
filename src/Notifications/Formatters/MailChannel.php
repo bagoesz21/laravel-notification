@@ -4,6 +4,8 @@ namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
 use Illuminate\Support\Arr;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\AnonymousNotifiable;
+use Bagoesz21\LaravelNotification\Mail\DefaultNotifMail;
 
 /**
  * Notification to mail
@@ -54,6 +56,12 @@ trait MailChannel
         return $this;
     }
 
+    /**
+    * Get the mail representation of the notification.
+    *
+    * @param mixed $notifiable
+    * @return Mailable
+    */
     public function toMail($notifiable)
     {
         $subject = $this->getTitle();
@@ -62,7 +70,28 @@ trait MailChannel
 
         $attachments = $this->getData('attachments');
 
-        $mail = (new MailMessage)->mailer($this->mailer);
+        $address = $notifiable instanceof AnonymousNotifiable
+            ? $notifiable->routeNotificationFor('mail')
+            : $notifiable->email;
+
+        $utmQuery = $this->getUTMAsQuery();
+        $uriQuery = $utmQuery;
+
+        $data = [
+            'title' => $subject,
+            'message_html' => $messageHTML,
+            'data' => $this->data,
+            'utm_query' => $utmQuery,
+            'uri_query' => $uriQuery
+        ];
+
+        $mail = (new DefaultNotifMail())
+            ->mailer($this->mailer)
+            ->to($address)
+            ->subject($subject)
+            ->locale($this->locale)
+            ->setData($data);
+
         if(!empty($attachments)){
             foreach ($attachments as $key => $attachment) {
                 $options = Arr::get($attachment, 'options', []);
@@ -80,12 +109,8 @@ trait MailChannel
             }
         }
 
-        if($this->isErrorNotif()){
-            $mail = $mail->error();
-        }
-
         if(!empty($this->theme)){
-            $mail = $mail->theme($this->theme);
+            $mail = $mail->theme = $this->theme;
         }
 
         if(!empty($this->tag)){
@@ -97,19 +122,6 @@ trait MailChannel
                 $mail = $mail->metadata($key, $meta);
             }
         }
-
-        $utmQuery = $this->getUTMAsQuery();
-        $uriQuery = $utmQuery;
-
-        $mail = $mail->markdown('emails.default-notif-mail', [
-            'subject' => $subject,
-            'title' => $subject,
-            'message_html' => $messageHTML,
-            'data' => $this->data,
-            'utm_query' => $utmQuery,
-            'uri_query' => $uriQuery
-        ])
-        ->subject($subject);
         return $mail;
     }
 }
