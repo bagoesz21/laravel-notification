@@ -22,10 +22,11 @@ abstract class BaseEnum extends Enum
      * Handle initiate enum value.
      * If value not in list enum, set default enum
      *
-     * @param mixed
+     * @param mixed $value
      * @return mixed
      */
-    private function handleEnumValue($value){
+    private function handleEnumValue($value)
+    {
         if (!in_array($value, array_values(static::getConstants()))) {
             $value = static::getDefaultValue();
         } elseif (is_string($value) && is_numeric($value)) {

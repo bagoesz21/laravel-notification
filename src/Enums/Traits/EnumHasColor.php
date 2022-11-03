@@ -2,6 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification\Enums\Traits;
 
+use Illuminate\Support\Arr;
+
 trait EnumHasColor
 {
     /**
@@ -12,6 +14,16 @@ trait EnumHasColor
     public $color;
 
     /**
+     * List enum colors
+     *
+     * @return array
+     */
+    public static function colors(): array
+    {
+        return [];
+    }
+
+    /**
      * Get the color for an enum value.
      *
      * @param  mixed  $value
@@ -19,16 +31,17 @@ trait EnumHasColor
      */
     public static function getColor($value): string
     {
-        return self::defaultColor($value);
+        $class = get_called_class();
+        if(empty($class::colors()))return $class::defaultColor();
+        return Arr::get($class::colors(), $value, $class::defaultColor());
     }
 
     /**
      * Default color
      *
-     * @param  mixed  $value
      * @return string
      */
-    private static function defaultColor($value): string
+    public static function defaultColor(): string
     {
         return 'blue';
     }

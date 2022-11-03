@@ -2,6 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification\Enums\Traits;
 
+use Illuminate\Support\Arr;
+
 trait EnumHasIcon
 {
     /**
@@ -12,6 +14,16 @@ trait EnumHasIcon
     public $icon;
 
     /**
+     * List enum icons
+     *
+     * @return array
+     */
+    public static function icons(): array
+    {
+        return [];
+    }
+
+    /**
      * Get the icon for an enum value.
      *
      * @param  mixed  $value
@@ -19,16 +31,17 @@ trait EnumHasIcon
      */
     public static function getIcon($value): string
     {
-        return self::defaultIcon($value);
+        $class = get_called_class();
+        if(empty($class::icons()))return $class::defaultIcon();
+        return Arr::get($class::icons(), $value, $class::defaultIcon());
     }
 
     /**
      * Default icon
      *
-     * @param  mixed  $value
      * @return string
      */
-    private static function defaultIcon($value): string
+    public static function defaultIcon(): string
     {
         return 'mdi-tag';
     }

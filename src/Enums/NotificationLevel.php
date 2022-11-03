@@ -3,6 +3,7 @@
 namespace Bagoesz21\LaravelNotification\Enums;
 
 use BenSampo\Enum\Contracts\LocalizedEnum;
+
 final class NotificationLevel extends BaseEnum implements LocalizedEnum
 {
     const INFO = 0;
@@ -10,25 +11,17 @@ final class NotificationLevel extends BaseEnum implements LocalizedEnum
     const WARNING = 2;
     const ERROR = 3;
 
-    public static function getColor($value): string
+    public static function colors(): array
     {
-        switch ($value) {
-            case self::INFO:
-                return 'blue';
-            case self::SUCCESS:
-                return 'green';
-            case self::WARNING:
-                return 'yellow';
-            case self::ERROR:
-                return 'red';
-            default:
-                return self::getKey($value);
-        }
-
-        return parent::getColor($value);
+        return [
+            self::INFO => 'blue',
+            self::SUCCESS => 'green',
+            self::WARNING => 'yellow',
+            self::ERROR => 'red'
+        ];
     }
 
-    public static function getIcon($value): string
+    public static function defaultIcon(): string
     {
         return 'mdi-bullhorn';
     }
