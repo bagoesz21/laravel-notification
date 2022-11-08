@@ -77,7 +77,7 @@ class LaravelNotificationServiceProvider extends ServiceProvider
 
         // Publishing the translation files.
         $this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/laravel-notification'),
+            __DIR__.'/../resources/lang' => $this->app->langPath('vendor/laravel-notification'),
         ], 'laravel-notification.lang');
 
         $this->publishMigrations();
