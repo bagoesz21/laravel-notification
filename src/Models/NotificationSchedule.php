@@ -3,16 +3,14 @@
 namespace Bagoesz21\LaravelNotification\Models;
 
 use Thomasjohnkane\Snooze\Models\ScheduledNotification as Model;
-use App\Traits\BaseModelTrait;
 use Bagoesz21\LaravelNotification\Models\Collections\NotificationScheduleCollection;
-use App\Models\Traits\NotificationTrait;
 use EloquentFilter\Filterable;
 use App\Models\User;
 
 class NotificationSchedule extends Model
 {
-    use BaseModelTrait;
-    use NotificationTrait;
+    use Traits\BaseModelTrait;
+    use Traits\NotificationTrait;
     use Filterable;
 
     protected $table = 'notification_schedules';
