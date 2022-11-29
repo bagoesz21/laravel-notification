@@ -15,6 +15,11 @@ Publish config :
 php artisan vendor:publish
 ```
 
+Add this code on boot in AppServiceProvider
+```
+\Bagoesz21\LaravelNotification\Facades\LaravelNotification::make()->init();
+```
+
 Setting .env code : (optional)
 ```
 NOTIF_QUEUE_NAME=default
