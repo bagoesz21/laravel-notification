@@ -15,10 +15,6 @@ class SystemNotif extends BaseNotification
         ];
     }
 
-    public function __construct()
-    {
-    }
-
     public function broadcastType()
     {
         return 'notif.system';
