@@ -44,7 +44,7 @@ class DefaultNotifMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
-        return $this->markdown('laravel-notification::views.emails.default-notif-mail', array_merge([], $this->data))
+        return $this->markdown('laravel-notification::emails.default-notif-mail', array_merge([], $this->data))
         ->subject($this->subject);
     }
 }

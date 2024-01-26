@@ -17,7 +17,7 @@ class LaravelNotificationServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laravel-notification');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'bagoesz21');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel-notification');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
 
