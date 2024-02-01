@@ -2,6 +2,7 @@
 
 namespace Bagoesz21\LaravelNotification\Services;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notification as LaravelNotification;
 use Illuminate\Database\Eloquent\Builder;
@@ -43,7 +44,7 @@ class BatchSendNotifService {
     {
         $this->response = new AlertResponse;
 
-        $this->enableLog  = (config('app.env') <> 'production') ? true : false;
+        $this->enableLog = App::environment('production') ? true : false;
 
         $this->notifConfig = NotifConfig::make();
     }

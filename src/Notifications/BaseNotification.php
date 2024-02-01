@@ -6,6 +6,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -364,7 +365,7 @@ class BaseNotification extends Notification implements ShouldQueue
      */
     public function setDebug($toggle = true)
     {
-        if(config('app.env') === 'production')return $this;
+        if(App::environment('production'))return $this;
 
         $this->debug = $toggle;
         return $this;

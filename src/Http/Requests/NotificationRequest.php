@@ -5,7 +5,6 @@ namespace Bagoesz21\LaravelNotification\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Arr;
-use App\Rules\RequiredContentProseMirrorRule;
 use BenSampo\Enum\Rules\EnumValue;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
@@ -83,7 +82,7 @@ class NotificationRequest extends FormRequest
         $notifRules = [
             'title' => 'required',
             'level' => '',
-            'message' => [new RequiredContentProseMirrorRule],
+            'message' => [],
             'image' => '',
             'external_url' => '',
             'data' => '',
