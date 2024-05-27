@@ -152,4 +152,48 @@ class NotificationService
         // ]);
         return $result;
     }
+
+    /**
+     * @param  \Illuminate\Support\Collection  $input
+     * @return bool
+     */
+    public function markAsUnRead($input)
+    {
+        $userID = Auth::id();
+        $notifID = $input->get('id');
+        $notifID = is_array($notifID) ? $notifID : [$notifID];
+
+        $readed = $this->model::where('notifiable_id', $userID)
+            ->whereNotNull('read_at')
+            ->whereIn('id', $notifID)
+            ->count();
+
+        $isReaded = ($readed > 0) ? true : false;
+
+        if ($isReaded) {
+            $this->model::where('notifiable_id', $userID)
+                ->whereNotNull('read_at')
+                ->whereIn('id', $notifID)
+                ->update(['read_at' => null]);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param  \Illuminate\Support\Collection  $input
+     * @return bool
+     */
+    public function delete($input)
+    {
+        $userID = Auth::id();
+        $notifID = $input->get('id');
+        $notifID = is_array($notifID) ? $notifID : [$notifID];
+
+        $readed = $this->model::where('notifiable_id', $userID)
+            ->whereIn('id', $notifID)
+            ->delete();
+
+        return true;
+    }
 }
