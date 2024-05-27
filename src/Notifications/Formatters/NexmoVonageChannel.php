@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use Illuminate\Notifications\Messages\NexmoMessage;
 
 /**
@@ -19,24 +18,26 @@ trait NexmoVonageChannel
     /**
      * Set unicode
      *
-     * @param bool $toggle
+     * @param  bool  $toggle
      * @return self
      */
     public function unicode($toggle = true)
     {
         $this->unicode = $toggle;
+
         return $this;
     }
 
     /**
      * Set from Nexmo phone number
      *
-     * @param string $from
+     * @param  string  $from
      * @return self
      */
     public function setFromNexmo($from)
     {
         $this->fromNexmo = $from;
+
         return $this;
     }
 
@@ -52,13 +53,14 @@ trait NexmoVonageChannel
             ->clientReference((string) $notifiable->id)
             ->content($this->getMessageAsPlainText());
 
-        if($this->unicode){
+        if ($this->unicode) {
             $channel = $channel->unicode();
         }
 
-        if(!empty($this->fromNexmo)){
+        if (! empty($this->fromNexmo)) {
             $channel = $channel->from($this->fromNexmo);
         }
+
         return $channel;
     }
 }

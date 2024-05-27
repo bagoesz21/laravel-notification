@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 use App\Models\Notification;
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NotificationFactory extends Factory
 {
@@ -41,7 +40,7 @@ class NotificationFactory extends Factory
 
             'created_at' => $this->faker->dateTimeBetween('-30 days', 'now', $timezone),
             'updated_at' => $this->faker->dateTimeBetween('-20 days', 'now', $timezone),
-            'deleted_at' => ($this->counter % 5 == 0) ? $this->faker->dateTimeBetween('-30 days', 'now', $timezone) : null
+            'deleted_at' => ($this->counter % 5 == 0) ? $this->faker->dateTimeBetween('-30 days', 'now', $timezone) : null,
         ];
     }
 }

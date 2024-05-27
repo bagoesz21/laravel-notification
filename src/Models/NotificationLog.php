@@ -2,22 +2,26 @@
 
 namespace Bagoesz21\LaravelNotification\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use EloquentFilter\Filterable;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class NotificationLog extends Model
 {
+    use Filterable;
     use HasFactory;
     use Traits\BaseModelTrait;
     use Traits\NotificationTrait;
-    use Filterable;
 
     protected $keyType = 'string';
+
     public $incrementing = false;
+
     protected $table = 'notification_logs';
+
     public $timestamps = true;
+
     protected $guarded = [];
 
     protected $casts = [
@@ -27,9 +31,10 @@ class NotificationLog extends Model
     {
         $tableName = NotifConfig::make()->get('tables.notification_log.table_name', null);
 
-        if(is_null($tableName)){
+        if (is_null($tableName)) {
             $tableName = parent::getTable();
         }
+
         return $tableName;
     }
 

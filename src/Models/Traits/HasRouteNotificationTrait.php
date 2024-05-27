@@ -7,7 +7,7 @@ trait HasRouteNotificationTrait
     /**
      * Route notifications for the mail channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return array|string
      */
     public function routeNotificationForMail($notification)
@@ -18,7 +18,7 @@ trait HasRouteNotificationTrait
     /**
      * Route notifications for the one signal channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return array|string
      */
     public function routeNotificationForOneSignal($notification)
@@ -29,7 +29,7 @@ trait HasRouteNotificationTrait
     /**
      * Route notifications for the Slack channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
      */
     public function routeNotificationForSlack($notification)
@@ -40,7 +40,7 @@ trait HasRouteNotificationTrait
     /**
      * Route notifications for the FCM channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return array|string
      */
     public function routeNotificationForFcm($notification)
@@ -51,7 +51,7 @@ trait HasRouteNotificationTrait
     /**
      * Route notifications for the Vonage channel.
      *
-     * @param  \Illuminate\Notifications\Notification $notification
+     * @param  \Illuminate\Notifications\Notification  $notification
      * @return string
      */
     public function routeNotificationForVonage($notification)

@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use NotificationChannels\Twilio\TwilioSmsMessage;
 
 /**

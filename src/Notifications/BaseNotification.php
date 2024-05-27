@@ -2,37 +2,38 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications;
 
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Bus\Queueable;
-
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\View\View;
-
+use Bagoesz21\LaravelNotification\Config\NotifConfig;
 use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
-use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Str;
+use Illuminate\View\View;
 
 class BaseNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    use Traits\HasChannels;
     use Traits\HasActionNotificationTrait;
+    use Traits\HasChannels;
     use Traits\HasNotificationLevelTrait;
     use Traits\HasTagAndMetaData;
     use Traits\HasUTMTrait;
 
     protected $notifConfig;
+
     protected $debug = false; //for debugging purpose
+
     public $enableLog = false;
 
     public $title = null;
+
     public $message = null;
 
     public $image = null;
+
     public array $data;
 
     protected $unsubscribeInfo = false;
@@ -50,20 +51,21 @@ class BaseNotification extends Notification implements ShouldQueue
     /**
      * Static create notification
      *
-     * @param string|null $title
-     * @param string|null $message
-     * @param array|null $data
-     * @param array|null $notifChannels
+     * @param  string|null  $title
+     * @param  string|null  $message
+     * @param  array|null  $data
+     * @param  array|null  $notifChannels
      * @return static
      */
     public static function create($title = null, $message = null, $data = [], $notifChannels = [])
     {
         $class = get_called_class();
+
         return (new $class())
-        ->initNotif($title, $message, $data, $notifChannels);
+            ->initNotif($title, $message, $data, $notifChannels);
     }
 
-    public static function config() : array
+    public static function config(): array
     {
         return [];
     }
@@ -71,7 +73,7 @@ class BaseNotification extends Notification implements ShouldQueue
     /**
      * Get config on this notification
      *
-     * @param string|null $key
+     * @param  string|null  $key
      * @return array|string|int|null
      */
     public static function getConfig($key = null)
@@ -82,13 +84,16 @@ class BaseNotification extends Notification implements ShouldQueue
     /**
      * Set title notification
      *
-     * @param string|null $title
+     * @param  string|null  $title
      * @return self
-    */
+     */
     public function setTitle($title)
     {
-        if(is_null($title))return $this;
+        if (is_null($title)) {
+            return $this;
+        }
         $this->title = $title;
+
         return $this;
     }
 
@@ -96,40 +101,46 @@ class BaseNotification extends Notification implements ShouldQueue
      * Get title notification
      *
      * @return string
-    */
+     */
     public function getTitle()
     {
-        return !empty($this->title) ? $this->title : $this->getReadableNotifType();
+        return ! empty($this->title) ? $this->title : $this->getReadableNotifType();
     }
 
     /**
      * Set message notification
      *
-     * @param string|null $message
+     * @param  string|null  $message
      * @return self
-    */
+     */
     public function setMessage($message)
     {
-        if(is_null($message))return $this;
+        if (is_null($message)) {
+            return $this;
+        }
         $this->message = $message;
+
         return $this;
     }
 
     /**
      * Set message from view blade
      *
-     * @param \Illuminate\View\View $view
+     * @param  \Illuminate\View\View  $view
      * @return self
      */
     public function setMessageFromView($view)
     {
         $html = '';
-        if($view instanceof View){
+        if ($view instanceof View) {
             $html = $view->render();
         }
 
-        if(empty($html))return $this;
+        if (empty($html)) {
+            return $this;
+        }
         $this->setMessage($html);
+
         return $this;
     }
 
@@ -147,7 +158,7 @@ class BaseNotification extends Notification implements ShouldQueue
      * Get message notification
      *
      * @return string
-    */
+     */
     public function getMessage()
     {
         return $this->message;
@@ -170,37 +181,39 @@ class BaseNotification extends Notification implements ShouldQueue
      */
     public function getMessageAsHTML()
     {
-        return "<p>" . $this->getMessage() . "</p>";
+        return '<p>'.$this->getMessage().'</p>';
     }
 
     /**
      * Set data notification
      *
-     * @param array $data
+     * @param  array  $data
      * @return self
-    */
+     */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
     /**
      * Set image notification
      *
-     * @param string $image. path image
+     * @param  string  $image.  path image
      * @return self
      */
     public function setImage($image)
     {
         $this->image = $image;
+
         return $this;
     }
 
     /**
      * Get image notification
      *
-     * @return self
+     * @return string
      */
     public function getImageUrl()
     {
@@ -210,18 +223,18 @@ class BaseNotification extends Notification implements ShouldQueue
     /**
      * Init notification
      *
-     * @param string|null $title
-     * @param string|null $message
-     * @param array|null $data
-     * @param array|null $notifChannels
+     * @param  string|null  $title
+     * @param  string|null  $message
+     * @param  array|null  $data
+     * @param  array|null  $notifChannels
      * @return self
-    */
+     */
     public function initNotif($title = null, $message = null, $data = [], $notifChannels = [])
     {
         $this->setDebug(config('app.debug'));
         $this->onConnection($this->notifConfig->get('connection'));
 
-        if($this->notifConfig->get('after_commit')){
+        if ($this->notifConfig->get('after_commit')) {
             $this->afterCommit();
         }
 
@@ -256,6 +269,7 @@ class BaseNotification extends Notification implements ShouldQueue
     public function build()
     {
         $this->setMessageFromView($this->viewMessage());
+
         return $this;
     }
 
@@ -263,13 +277,12 @@ class BaseNotification extends Notification implements ShouldQueue
      * Get readable type notification
      *
      * @return string
-    */
+     */
     public function getReadableNotifType()
     {
         $currentClass = (new \ReflectionClass(get_called_class()))->getShortName();
 
-        return Arr::first(NotifHelper::getNotifModelClass()::listNotificationType(), function ($value, $key) use
-        ($currentClass) {
+        return Arr::first(NotifHelper::getNotifModelClass()::listNotificationType(), function ($value, $key) use ($currentClass) {
             return $value['class'] === $currentClass;
         });
     }
@@ -277,9 +290,9 @@ class BaseNotification extends Notification implements ShouldQueue
     /**
      * Get data on notification array
      *
-     * @param string $key
+     * @param  string  $key
      * @return mixed
-    */
+     */
     public function getData($key)
     {
         if (empty($this->data)) {
@@ -325,19 +338,23 @@ class BaseNotification extends Notification implements ShouldQueue
      */
     public function shouldSend($notifiable, $channel)
     {
-        if($this->debug)return true;
+        if ($this->debug) {
+            return true;
+        }
+
         return true;
     }
 
     /**
      * Show unsubscribe information in mail
      *
-     * @param boolean $toggle
+     * @param  bool  $toggle
      * @return self
      */
     public function unsubscribeInfo($toggle = true)
     {
         $this->unsubscribeInfo = $toggle;
+
         return $this;
     }
 
@@ -350,24 +367,30 @@ class BaseNotification extends Notification implements ShouldQueue
     public function withDelay($notifiable)
     {
         $date = now();
-        return array_filter($this->listChannels(), function($channel) use ($date) {
-            if(!array_key_exists('delay', $channel))return [];
+
+        return array_filter($this->listChannels(), function ($channel) use ($date) {
+            if (! array_key_exists('delay', $channel)) {
+                return [];
+            }
 
             return [
-                Arr::get($channel, 'value') => $date->addMinutes(Arr::get($channel, 'delay', 0))
+                Arr::get($channel, 'value') => $date->addMinutes(Arr::get($channel, 'delay', 0)),
             ];
         });
     }
 
     /**
-     * @param boolean $toggle
+     * @param  bool  $toggle
      * @return self
      */
     public function setDebug($toggle = true)
     {
-        if(App::environment('production'))return $this;
+        if (App::environment('production')) {
+            return $this;
+        }
 
         $this->debug = $toggle;
+
         return $this;
     }
 }

@@ -22,7 +22,7 @@ trait DefaultFilterDataTrait
     /**
      * Filter by id primary key
      *
-     * @param integer|string|array $id
+     * @param  int|string|array  $id
      * @return self
      */
     public function id($id)
@@ -33,7 +33,7 @@ trait DefaultFilterDataTrait
     /**
      * Filter soft delete data. Require soft delete feature
      *
-     * @param string $softDelete
+     * @param  string  $softDelete
      * @return void
      */
     public function softDelete($softDelete)
@@ -44,7 +44,7 @@ trait DefaultFilterDataTrait
                 $this->onlyTrashed();
                 break;
 
-            //get data + deleted data
+                //get data + deleted data
             case 'with_trashed':
                 $this->withTrashed();
                 break;
@@ -59,6 +59,7 @@ trait DefaultFilterDataTrait
         if ($date instanceof Carbon) {
             return $date->format('Y-m-d H:i:s');
         }
+
         return $date;
     }
 }

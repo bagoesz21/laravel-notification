@@ -18,8 +18,7 @@ class BasePolicy
     /**
      * Check access user
      *
-     * @param  string $ability
-     * @param  \App\Models\User  $user
+     * @param  string  $ability
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -31,7 +30,6 @@ class BasePolicy
     /**
      * Determine whether the user can view the model.
      *
-     * @param  \App\Models\User  $user
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -43,7 +41,6 @@ class BasePolicy
     /**
      * Determine whether the user can view any models.
      *
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function viewAny(User $user)
@@ -54,7 +51,7 @@ class BasePolicy
     /**
      * Determine whether the user can entry (Create/Add, Update/Edit) models.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\User|null  $model
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -66,7 +63,6 @@ class BasePolicy
     /**
      * Determine whether the user can create models.
      *
-     * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
     public function create(User $user)
@@ -77,7 +73,7 @@ class BasePolicy
     /**
      * Determine whether the user can update the model.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\User|null  $model
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -89,7 +85,7 @@ class BasePolicy
     /**
      * Determine whether the user can delete the model.
      *
-     * @param  \App\Models\User  $user
+     * @param  \App\Models\User|null  $model
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -101,7 +97,6 @@ class BasePolicy
     /**
      * Determine whether the user can restore the model.
      *
-     * @param  \App\Models\User  $user
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */
@@ -113,7 +108,6 @@ class BasePolicy
     /**
      * Determine whether the user can permanently delete the model.
      *
-     * @param  \App\Models\User  $user
      * @param  \Illuminate\Database\Eloquent\Model|null  $model
      * @return \Illuminate\Auth\Access\Response|bool
      */

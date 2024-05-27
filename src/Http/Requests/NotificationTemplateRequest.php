@@ -26,7 +26,7 @@ class NotificationTemplateRequest extends FormRequest
         $rules = [
             'name' => 'required',
             'title' => 'required',
-            'message' => ''
+            'message' => '',
         ];
 
         return $rules;
@@ -41,9 +41,9 @@ class NotificationTemplateRequest extends FormRequest
     public function attributes()
     {
         return [
-            'name' => "laravel-notification::notification.template.name",
-            'title' => "laravel-notification::notification.template.title",
-            'message' => "laravel-notification::notification.template.message",
+            'name' => 'laravel-notification::notification.template.name',
+            'title' => 'laravel-notification::notification.template.title',
+            'message' => 'laravel-notification::notification.template.message',
         ];
     }
 }

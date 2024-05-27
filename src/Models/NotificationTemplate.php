@@ -2,20 +2,22 @@
 
 namespace Bagoesz21\LaravelNotification\Models;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Bagoesz21\LaravelNotification\Casts\JsonCast;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
 use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class NotificationTemplate extends Model
 {
+    use Filterable;
     use HasFactory;
     use Traits\BaseModelTrait;
-    use Filterable;
 
     protected $table = 'notification_templates';
+
     public $timestamps = true;
+
     protected $guarded = [];
 
     protected $casts = [
@@ -26,9 +28,10 @@ class NotificationTemplate extends Model
     {
         $tableName = NotifConfig::make()->get('tables.notification_template.table_name', null);
 
-        if(is_null($tableName)){
+        if (is_null($tableName)) {
             $tableName = parent::getTable();
         }
+
         return $tableName;
     }
 

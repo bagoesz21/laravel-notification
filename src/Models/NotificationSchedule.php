@@ -2,19 +2,21 @@
 
 namespace Bagoesz21\LaravelNotification\Models;
 
-use Thomasjohnkane\Snooze\Models\ScheduledNotification as Model;
+use App\Models\User;
 use Bagoesz21\LaravelNotification\Models\Collections\NotificationScheduleCollection;
 use EloquentFilter\Filterable;
-use App\Models\User;
+use Thomasjohnkane\Snooze\Models\ScheduledNotification as Model;
 
 class NotificationSchedule extends Model
 {
+    use Filterable;
     use Traits\BaseModelTrait;
     use Traits\NotificationTrait;
-    use Filterable;
 
     protected $table = 'notification_schedules';
+
     public $timestamps = true;
+
     protected $guarded = [];
 
     /** @return \Illuminate\Database\Eloquent\Relations\BelongsTo */
@@ -38,12 +40,13 @@ class NotificationSchedule extends Model
         $classNotif = (new \ReflectionClass($this->target_type))->getShortName();
         switch ($classNotif) {
             case 'User':
-                $targetTypeText = "User";
+                $targetTypeText = 'User';
                 break;
             default:
                 $targetTypeText = $this->target_type;
                 break;
         }
+
         return $targetTypeText;
     }
 

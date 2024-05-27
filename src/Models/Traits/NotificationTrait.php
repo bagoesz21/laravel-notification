@@ -2,12 +2,10 @@
 
 namespace Bagoesz21\LaravelNotification\Models\Traits;
 
-use Illuminate\Support\Arr;
-
-use App\Services\ProseMirror\Renderer;
-use Illuminate\Support\Facades\Auth;
-
 use App\Models\User;
+use App\Services\ProseMirror\Renderer;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 trait NotificationTrait
 {
@@ -25,13 +23,14 @@ trait NotificationTrait
                 'class' => \Bagoesz21\LaravelNotification\Notifications\SystemNotif::class,
             ],
         ];
+
         return $result;
     }
 
     /**
      * Get full class notification by type
      *
-     * @param array|string $types
+     * @param  array|string  $types
      * @return array
      */
     public static function getFullClassNotificationType($types)
@@ -47,19 +46,20 @@ trait NotificationTrait
                 return (new \ReflectionClass($value['class']))->getShortName() === $type;
             });
 
-            if (!empty($find)) {
+            if (! empty($find)) {
                 $return[] = (new \ReflectionClass($find['class']))->getName();
             }
         }
+
         return $return;
     }
 
     /**
-    * Format readable notification type
-    *
-    * @param string $type
-    * @return string
-    */
+     * Format readable notification type
+     *
+     * @param  string  $type
+     * @return string
+     */
     public function readableNotificationType($type)
     {
         $notifText = $type;
@@ -73,23 +73,24 @@ trait NotificationTrait
         });
 
         $notifText = Arr::get($result, 'name', $notifText);
+
         return $notifText;
     }
 
     /**
-    * Format readable notification data
-    *
-    * @param mixed $data
-    * @return mixed
-    */
+     * Format readable notification data
+     *
+     * @param  mixed  $data
+     * @return mixed
+     */
     public function readableNotificationData($data)
     {
         if (empty($data)) {
             return false;
         }
 
-        $data->message_html = "";
-        if (!empty($data->message)) {
+        $data->message_html = '';
+        if (! empty($data->message)) {
             $data->message_html = $this->proseMirrorToHTML($data->message);
         }
         $data->action_url = $this->readableActionUrlData();
@@ -99,25 +100,26 @@ trait NotificationTrait
     }
 
     /**
-    * Convert prose mirror to HTML
-    *
-    * @param string|null $json
-    * @param bool $lazyImg
-    * @return string
-    */
+     * Convert prose mirror to HTML
+     *
+     * @param  string|null  $json
+     * @param  bool  $lazyImg
+     * @return string
+     */
     public function proseMirrorToHTML($json, $lazyImg = false)
     {
         if (empty($json)) {
-            return "";
+            return '';
         }
 
         $renderer = new Renderer();
 
-        if (!$lazyImg) {
+        if (! $lazyImg) {
             $renderer->addImageNotLazy();
         }
         $renderer->setContent($json);
         $content = $renderer->getHTML();
+
         return $content;
     }
 
@@ -135,14 +137,14 @@ trait NotificationTrait
 
         $classNotif = (new \ReflectionClass($this->type))->getShortName();
         switch ($classNotif) {
-            case "GeneralNotif":
+            case 'GeneralNotif':
                 $actionUrl = null;
                 break;
-            case "ActivityAboutUserNotif":
+            case 'ActivityAboutUserNotif':
                 $actionUrl = $this->actionUrlInActivityNotif();
 
                 break;
-            case "SystemNotif":
+            case 'SystemNotif':
                 $actionUrl = $this->defaultNotificationUrl();
                 break;
 
@@ -150,6 +152,7 @@ trait NotificationTrait
                 $actionUrl = null;
                 break;
         }
+
         return $actionUrl;
     }
 
@@ -168,7 +171,7 @@ trait NotificationTrait
 
         $classNotif = (new \ReflectionClass($this->type))->getShortName();
         switch ($classNotif) {
-            case "SystemNotif":
+            case 'SystemNotif':
                 $actions = $this->actionUrlInSystemNotif();
                 break;
 
@@ -176,14 +179,15 @@ trait NotificationTrait
                 $actions = [];
                 break;
         }
+
         return $actions;
     }
 
     /**
-    * Format action url notif by notif type activity user
-    *
-    * @return string|null
-    */
+     * Format action url notif by notif type activity user
+     *
+     * @return string|null
+     */
     protected function actionUrlInActivityNotif()
     {
         $defaultActionUrl = $this->defaultNotificationUrl();
@@ -200,20 +204,21 @@ trait NotificationTrait
 
         $id = $this->data->id;
 
-        $result = "";
+        $result = '';
         switch (strtolower($this->data->notif_group)) {
             default:
                 $result = $defaultActionUrl;
                 break;
         }
+
         return $result;
     }
 
     /**
-    * Format action url notif by notif type system
-    *
-    * @return array|null
-    */
+     * Format action url notif by notif type system
+     *
+     * @return array|null
+     */
     protected function actionUrlInSystemNotif()
     {
         $defaultActionUrl = $this->defaultNotificationUrl();
@@ -222,7 +227,7 @@ trait NotificationTrait
             'title' => 'Aksi',
             'url' => $defaultActionUrl,
             'routeName' => '',
-            'params' => []
+            'params' => [],
         ];
         $result = $defaultAction;
 
@@ -239,14 +244,16 @@ trait NotificationTrait
 
         $result = [];
         foreach ($actions as $key => $action) {
-            $action = (array)$action;
+            $action = (array) $action;
             $params = Arr::get($action, 'params');
 
-            $params = is_object($params) ? (array) $params  : $params;
+            $params = is_object($params) ? (array) $params : $params;
+            $routeName = 'home';
+            $title = '';
 
             switch (strtolower(Arr::get($action, 'name'))) {
-                case "user":
-                    $routeName = "admin.user.export.download";
+                case 'user':
+                    $routeName = 'admin.user.export.download';
                     $title = 'Download Ekspor Data User';
                     break;
                 default:
@@ -259,9 +266,10 @@ trait NotificationTrait
                 'title' => $title,
                 'url' => route($routeName, $params),
                 'routeName' => $routeName,
-                'params' => $params
+                'params' => $params,
             ];
         }
+
         return $result;
     }
 
@@ -272,13 +280,14 @@ trait NotificationTrait
      */
     public function defaultNotificationUrl()
     {
-        $url = "";
+        $url = '';
         $auth = Auth::user();
         if (empty($auth)) {
             return $url;
         }
 
         $url = route('admin.profile.notification.all');
+
         return $url;
     }
 }

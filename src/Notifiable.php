@@ -10,12 +10,12 @@ trait Notifiable
 
     public function receivesBroadcastNotificationsOn()
     {
-        return 'user.' . $this->id;
+        return 'user.'.$this->id;
     }
 
     public function routeNotificationForMail($notification)
     {
-        return [$this->email => (!empty($this->name) ? $this->name : $this->username)];
+        return [$this->email => (! empty($this->name) ? $this->name : $this->username)];
     }
 
     public function routeNotificationForOneSignal()

@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use Illuminate\Notifications\Messages\BroadcastMessage;
 
 /**
@@ -20,6 +19,7 @@ trait BroadcastChannel
     public function initBroadcast()
     {
         $this->setSelectedChannel('broadcast');
+
         return $this;
     }
 
@@ -30,7 +30,7 @@ trait BroadcastChannel
             'title' => $this->getTitle(),
             'level' => $this->getLevel(),
             'image' => $this->getData('image'),
-            'database_notif' => $this->isNotifVia('database')
+            'database_notif' => $this->isNotifVia('database'),
         ]);
     }
 

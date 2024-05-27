@@ -2,8 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification\Models\Traits;
 
-use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\HasDatabaseNotifications;
 use Illuminate\Notifications\RoutesNotifications;
 
 trait UserNotifiable

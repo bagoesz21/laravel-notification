@@ -2,17 +2,15 @@
 
 namespace Bagoesz21\LaravelNotification;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Collection;
-use Illuminate\Filesystem\Filesystem;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Collection;
+use Illuminate\Support\ServiceProvider;
 
 class LaravelNotificationServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -29,8 +27,6 @@ class LaravelNotificationServiceProvider extends ServiceProvider
 
     /**
      * Register any package services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -54,8 +50,6 @@ class LaravelNotificationServiceProvider extends ServiceProvider
 
     /**
      * Console-specific booting.
-     *
-     * @return void
      */
     protected function bootForConsole(): void
     {
@@ -92,22 +86,19 @@ class LaravelNotificationServiceProvider extends ServiceProvider
     protected function publishMigrations()
     {
         $migrations = [
-            __DIR__.'/../database/migrations/create_notifications_table.php.stub' =>
-            $this->getMigrationFileName('create_notifications_table.php')
+            __DIR__.'/../database/migrations/create_notifications_table.php.stub' => $this->getMigrationFileName('create_notifications_table.php'),
         ];
 
         $notifConfig = NotifConfig::make();
-        if ($notifConfig->get('tables.notification_log.enabled', false)){
+        if ($notifConfig->get('tables.notification_log.enabled', false)) {
             $migrations = array_merge($migrations, [
-                __DIR__.'/../database/migrations/create_notification_logs_table.php.stub' =>
-                $this->getMigrationFileName('create_notification_logs_table.php'),
+                __DIR__.'/../database/migrations/create_notification_logs_table.php.stub' => $this->getMigrationFileName('create_notification_logs_table.php'),
             ]);
         }
 
-        if ($notifConfig->get('tables.notification_template.enabled', false)){
+        if ($notifConfig->get('tables.notification_template.enabled', false)) {
             $migrations = array_merge($migrations, [
-                __DIR__.'/../database/migrations/create_notification_templates_table.php.stub' =>
-                $this->getMigrationFileName('create_notification_templates_table.php'),
+                __DIR__.'/../database/migrations/create_notification_templates_table.php.stub' => $this->getMigrationFileName('create_notification_templates_table.php'),
             ]);
         }
 
@@ -117,7 +108,7 @@ class LaravelNotificationServiceProvider extends ServiceProvider
     /**
      * Returns existing migration file if found, else uses the current timestamp.
      *
-     * @return string
+     * @return void
      */
     protected function getMigrationFileName($migrationFileName): string
     {

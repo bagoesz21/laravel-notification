@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Traits;
 
-use Illuminate\Support\Arr;
 use App\Services\ProseMirror\Renderer;
 use Illuminate\View\View;
 
@@ -16,18 +15,20 @@ trait UseProseMirrorAsMessage
     /**
      * Set message notification to prose mirror scheme
      *
-     * @param mixed|null $message
+     * @param  mixed|null  $message
      * @return mixed
-    */
+     */
     public function setMessageToProseMirror($message = null)
     {
         if (is_null($message)) {
             $message = $this->getMessage();
         }
-        if(is_null($message))return false;
+        if (is_null($message)) {
+            return false;
+        }
         $isMessageAsProseMirror = $this->isProseMirrorScheme($message);
 
-        if (!$isMessageAsProseMirror) {
+        if (! $isMessageAsProseMirror) {
             $proseMirror = $this->convertStringToProseMirror($message);
             $this->setMessage(json_encode($proseMirror));
         }
@@ -38,20 +39,20 @@ trait UseProseMirrorAsMessage
     /**
      * Convert string to prose mirror scheme
      *
-     * @param string $string
+     * @param  string  $string
      * @return array
-    */
+     */
     public function convertStringToProseMirror($string)
     {
         return $this->getRenderer()
-        ->setContent("<p>" . $string . "</p>")
-        ->getDocument();
+            ->setContent('<p>'.$string.'</p>')
+            ->getDocument();
     }
 
     /**
      * Get renderer prosemirror
      *
-     * @param mixed|null $content
+     * @param  mixed|null  $content
      * @return \App\Services\ProseMirror\Renderer
      */
     public function getRenderer($content = null)
@@ -59,23 +60,24 @@ trait UseProseMirrorAsMessage
         $renderer = new Renderer([], false, false, true);
         $content = is_null($content) ? $this->getMessage() : $content;
 
-        if(!is_null($content)){
+        if (! is_null($content)) {
             $renderer->setContent($content);
         }
 
-        if($this->enableUTM){
+        if ($this->enableUTM) {
             $renderer->insertUTM($this->getUTMAsKeyValue());
         }
+
         return $renderer;
     }
 
     /**
      * Convert prose mirror to HTML
      *
-     * @param object|string $scheme
-     * @param bool $lazyImg
+     * @param  object|string  $scheme
+     * @param  bool  $lazyImg
      * @return string
-    */
+     */
     public function proseMirrorToHTML($scheme, $lazyImg = false)
     {
         if (empty($scheme)) {
@@ -83,18 +85,19 @@ trait UseProseMirrorAsMessage
         }
 
         $renderer = $this->getRenderer($scheme);
-        if (!$lazyImg) {
+        if (! $lazyImg) {
             $renderer->addImageNotLazy();
         }
+
         return $renderer->getHTML();
     }
 
     /**
      * Check document is valid prose mirror scheme or not.
      *
-     * @param mixed $document
+     * @param  mixed  $document
      * @return bool
-    */
+     */
     public function isProseMirrorScheme($document)
     {
         if (empty($document)) {
@@ -102,6 +105,7 @@ trait UseProseMirrorAsMessage
         }
 
         $renderer = $this->getRenderer($document);
+
         return $renderer->isDocumentValid();
     }
 
@@ -114,18 +118,21 @@ trait UseProseMirrorAsMessage
     /**
      * Set message from view blade
      *
-     * @param \Illuminate\View\View $view
+     * @param  \Illuminate\View\View  $view
      * @return self
      */
     public function setMessageFromView($view)
     {
         $html = '';
-        if($view instanceof View){
+        if ($view instanceof View) {
             $html = $view->render();
         }
 
-        if(empty($html))return $this;
+        if (empty($html)) {
+            return $this;
+        }
         $this->setMessage($this->getRenderer($html)->getJSON());
+
         return $this;
     }
 
@@ -137,9 +144,12 @@ trait UseProseMirrorAsMessage
     public function getMessageAsPlainText()
     {
         $isMessageAsProseMirror = $this->isProseMirrorScheme($this->getMessage());
-        if(!$isMessageAsProseMirror)return $this->getMessage();
+        if (! $isMessageAsProseMirror) {
+            return $this->getMessage();
+        }
 
         $renderer = $this->getRenderer();
+
         return $renderer->getText();
     }
 

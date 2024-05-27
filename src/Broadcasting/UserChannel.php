@@ -19,8 +19,7 @@ class UserChannel
     /**
      * Authenticate the user's access to the channel.
      *
-     * @param  \App\Models\User  $user
-     * @param   String $userID
+     * @param  string  $userID
      * @return array|bool
      */
     public function join(User $user, $userID)

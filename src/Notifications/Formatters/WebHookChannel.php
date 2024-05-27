@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use NotificationChannels\Webhook\WebhookMessage;
 
 /**
@@ -17,7 +16,7 @@ trait WebHookChannel
         return WebhookMessage::create()
             ->data([
             ])
-            ->userAgent("Custom-User-Agent")
+            ->userAgent('Custom-User-Agent')
             ->header('X-Custom', 'Custom-Header');
     }
 }

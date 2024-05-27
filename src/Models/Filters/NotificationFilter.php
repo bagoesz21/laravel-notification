@@ -2,9 +2,9 @@
 
 namespace Bagoesz21\LaravelNotification\Models\Filters;
 
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use EloquentFilter\ModelFilter;
 use Illuminate\Support\Arr;
-use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 
 class NotificationFilter extends ModelFilter
 {
@@ -21,7 +21,8 @@ class NotificationFilter extends ModelFilter
         $this->model = NotifHelper::getNotifModelClass();
     }
 
-    private function getTableName(){
+    private function getTableName()
+    {
         return $this->model::getTableName();
     }
 
@@ -42,9 +43,9 @@ class NotificationFilter extends ModelFilter
 
     public function isRead($isRead)
     {
-        if($isRead){
+        if ($isRead) {
             $this->whereNotNull('read_at');
-        }else {
+        } else {
             $this->whereNull('read_at');
         }
     }

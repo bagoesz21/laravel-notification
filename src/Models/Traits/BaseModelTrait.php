@@ -3,26 +3,21 @@
 namespace Bagoesz21\LaravelNotification\Models\Traits;
 
 use DateTimeInterface;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Concerns\HasTimestamps;
+use Illuminate\Support\Facades\DB;
 
 trait BaseModelTrait
 {
     /**
-     * Query scope truncate text in column
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $q
-     * @param string $col
-     * @param int $limit
-     * @return \Illuminate\Database\Eloquent\Builder
+     * query potong data dari kolom ..
      */
     public function scopeSelectColTruncated($q, $col, $limit = 100)
     {
-        $qry_truncated = "SUBSTRING(".$col.",1, ".$limit.")";
-        $query = "case when length(".$col.") > ".$limit."
-                    then concat(".$qry_truncated.", ' ...')
-                    else ".$col." end as ".$col.'_truncated';
-        return $q->addSelect(\DB::raw($query));
+        $qry_truncated = 'SUBSTRING('.$col.',1, '.$limit.')';
+        $query = 'case when length('.$col.') > '.$limit.'
+                    then concat('.$qry_truncated.", ' ...')
+                    else ".$col.' end as '.$col.'_truncated';
+
+        return $q->addSelect(DB::raw($query));
     }
 
     protected function serializeDate(DateTimeInterface $date)
@@ -38,6 +33,7 @@ trait BaseModelTrait
     public static function getTableName()
     {
         $class = get_called_class();
+
         return (new $class)->getTable();
     }
 
@@ -49,6 +45,7 @@ trait BaseModelTrait
     public static function getPrimaryKeyName()
     {
         $class = get_called_class();
+
         return (new $class())->getKeyName();
     }
 
@@ -59,7 +56,7 @@ trait BaseModelTrait
      */
     public static function getTablePrimaryKeyName()
     {
-        return self::getTableName() . "." . self::getPrimaryKeyName();
+        return self::getTableName().'.'.self::getPrimaryKeyName();
     }
 
     /**
@@ -98,56 +95,29 @@ trait BaseModelTrait
         return false;
     }
 
-    public function scopeSelectDefault($q)
+    public function defaultSelect()
     {
-        return $q->addSelect(self::getTablePrimaryKeyName(), 'name');
+        return [];
     }
 
-    private function isUsesTimestamps()
+    public function scopeSelectDefault($q)
     {
-        if(!in_array(HasTimestamps::class, class_uses_recursive(get_called_class()), true))return false;
-
-        return !$this->usesTimestamps();
+        return $q->addSelect(self::getTablePrimaryKeyName())->addSelect($this->defaultSelect());
     }
 
     public function scopeSelectTimestamp($q)
     {
-        if(!$this->isUsesTimestamps())return $q;
-
         return $q->addSelect(
-            $this->getCreatedAtColumn(),
-            $this->getUpdatedAtColumn(),
+            ! empty($this->CREATED_AT) ? $this->CREATED_AT : 'created_at',
+            ! empty($this->UPDATED_AT) ? $this->CREATED_AT : 'updated_at'
         );
-    }
-
-    public function getCreatedAtAgoHumanAttribute()
-    {
-        if(!$this->isUsesTimestamps())return null;
-        return \Carbon\Carbon::parse($this->created_at)->diffForHumans();
-    }
-
-    public function getUpdatedAtAgoHumanAttribute()
-    {
-        if(!$this->isUsesTimestamps())return null;
-        return \Carbon\Carbon::parse($this->updated_at)->diffForHumans();
-    }
-
-    private function isUsesSoftDelete()
-    {
-        return in_array(SoftDeletes::class, class_uses_recursive(get_called_class()), true);
-    }
-
-    public function getDeletedAtAgoHumanAttribute()
-    {
-        if(!$this->isUsesSoftDelete())return null;
-        return \Carbon\Carbon::parse($this->deleted_at)->diffForHumans();
     }
 
     public function scopeSelectSoftDelete($q)
     {
-        if(!$this->isUsesSoftDelete())return $q;
-        if(!in_array(SoftDeletes::class, class_uses_recursive(get_called_class()), true))return $q;
-        return $q->addSelect($this->getDeletedAtColumn());
+        return $q->addSelect(
+            ! empty($this->DELETED_AT) ? $this->deleted_at : 'deleted_at'
+        );
     }
 
     public function scopeSelectDataDate($q)
@@ -158,25 +128,26 @@ trait BaseModelTrait
     /**
      * Select row number
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string|null $alias. Default = "no"
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string|null  $alias.  Default = "no"
      * @return \Illuminate\Database\Eloquent\Builder $query
      */
-    public function scopeSelectRowNumber($query, $alias = "no")
+    public function scopeSelectRowNumber($query, $alias = 'no')
     {
         $conn = $this->getConnection();
 
         $selectRawRowNumber = null;
-        if( $conn instanceOf \Illuminate\Database\PostgresConnection){
-            $selectRawRowNumber = \DB::raw("row_number() over()");
-        } else if( $conn instanceOf \Illuminate\Database\MySqlConnection) {
-            \DB::statement(\DB::raw('set @row=0'));
-            $selectRawRowNumber = \DB::raw("@row:=@row+1 as 'row_number'");
+        if ($conn instanceof \Illuminate\Database\PostgresConnection) {
+            $selectRawRowNumber = DB::raw('row_number() over()');
+        } elseif ($conn instanceof \Illuminate\Database\MySqlConnection) {
+            DB::statement(DB::raw('set @row=0'));
+            $selectRawRowNumber = DB::raw("@row:=@row+1 as 'row_number'");
         }
 
-        if($selectRawRowNumber)return $query;
+        if ($selectRawRowNumber) {
+            return $query;
+        }
 
         return $query->addSelect($selectRawRowNumber);
     }
 }
-

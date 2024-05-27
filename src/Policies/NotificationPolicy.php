@@ -10,5 +10,6 @@ class NotificationPolicy extends BasePolicy
     use HandlesAuthorization;
 
     protected $roleGroup = 'notification';
+
     protected $model = Notification::class;
 }

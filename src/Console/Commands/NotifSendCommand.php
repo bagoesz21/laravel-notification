@@ -2,11 +2,11 @@
 
 namespace Bagoesz21\LaravelNotification\Console\Commands;
 
-use Illuminate\Console\Command;
+use App\Models\User;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use Bagoesz21\LaravelNotification\Notifications\GeneralNotif;
-use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class NotifSendCommand extends Command
 {
@@ -43,7 +43,7 @@ class NotifSendCommand extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return void
      */
     public function handle()
     {
@@ -57,13 +57,15 @@ class NotifSendCommand extends Command
 
         $sent_at = $this->option('sent_at');
 
-        if(!empty($sent_at)){
+        if (! empty($sent_at)) {
             $sent_at = Carbon::parse($sent_at);
         }
 
         foreach ($users as $key => $user) {
             $user = User::find($user);
-            if(empty($user)) continue;
+            if (empty($user)) {
+                continue;
+            }
 
             NotifHelper::send($notif, $user, $sent_at);
 

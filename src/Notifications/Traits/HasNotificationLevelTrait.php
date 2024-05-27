@@ -9,14 +9,15 @@ trait HasNotificationLevelTrait
     public $level = NotificationLevel::INFO;
 
     /**
-     * @param \Bagoesz21\LaravelNotification\Enums\NotificationLevel|int $level
+     * @param  \Bagoesz21\LaravelNotification\Enums\NotificationLevel|int  $level
      * @return \Bagoesz21\LaravelNotification\Enums\NotificationLevel
      */
     protected function convertLevel($level)
     {
-        if(!($level instanceof NotificationLevel)){
-            $level = NotificationLevel::fromValue($level);
+        if (! ($level instanceof NotificationLevel)) {
+            $level = NotificationLevel::from($level);
         }
+
         return $level;
     }
 
@@ -24,12 +25,13 @@ trait HasNotificationLevelTrait
      * Set level notification
      * Level value / enum
      *
-     * @param int|\Bagoesz21\LaravelNotification\Enums\NotificationLevel $level
+     * @param  int|\Bagoesz21\LaravelNotification\Enums\NotificationLevel  $level
      * @return self
-    */
+     */
     public function setLevel($level)
     {
         $this->level = $this->convertLevel($level);
+
         return $this;
     }
 
@@ -37,7 +39,7 @@ trait HasNotificationLevelTrait
      * Get level notification
      *
      * @return \Bagoesz21\LaravelNotification\Enums\NotificationLevel
-    */
+     */
     public function getLevel()
     {
         return $this->level;
@@ -46,34 +48,39 @@ trait HasNotificationLevelTrait
     public function infoNotif()
     {
         $this->setLevel(NotificationLevel::INFO);
+
         return $this;
     }
 
     public function successNotif()
     {
         $this->setLevel(NotificationLevel::SUCCESS);
+
         return $this;
     }
 
     public function warningNotif()
     {
         $this->setLevel(NotificationLevel::WARNING);
+
         return $this;
     }
 
     public function errorNotif()
     {
         $this->setLevel(NotificationLevel::ERROR);
+
         return $this;
     }
 
     /**
-     * @param \Bagoesz21\LaravelNotification\Enums\NotificationLevel|int $level
+     * @param  \Bagoesz21\LaravelNotification\Enums\NotificationLevel|int  $level
      * @return bool
      */
     public function isLevelNotif($level)
     {
         $level = $this->convertLevel($level);
+
         return $this->level->is($level);
     }
 

@@ -7,13 +7,14 @@ use Illuminate\Support\Arr;
 trait HasChannels
 {
     public $notifChannels = [];
+
     protected $selectedChannel = null;
 
     /**
      * List all supported channels.
      *
      * @return array
-    */
+     */
     public function listChannels()
     {
         return $this->notifConfig->get('channels');
@@ -23,7 +24,7 @@ trait HasChannels
      * List always allowed channels / mandatory channels.
      *
      * @return array
-    */
+     */
     public function listMandatoryChannels()
     {
         return $this->notifConfig->get('mandatory_channels');
@@ -33,7 +34,7 @@ trait HasChannels
      * List alias channels (key for naming database, value for naming class notification laravel)
      *
      * @return array
-    */
+     */
     public function listAliasChannels()
     {
         return Arr::pluck($this->listChannels(), 'class', 'value');
@@ -43,7 +44,7 @@ trait HasChannels
      * List default allowed channels / default channels.
      *
      * @return array
-    */
+     */
     public function listDefaultChannels()
     {
         return $this->notifConfig->get('default_channels');
@@ -52,61 +53,65 @@ trait HasChannels
     /**
      * Set selected channel
      *
-     * @param string $channelKey
+     * @param  string  $channelKey
      * @return self
      */
     public function setSelectedChannel($channelKey)
     {
         $this->selectedChannel = $channelKey;
+
         return $this;
     }
 
     /**
      * Get selected channel
      *
-     * @param string $channelKey
+     * @param  string  $channelKey
      * @return array
      */
     public function getChannel($channelKey = null)
     {
-        if(is_null($channelKey)){
+        if (is_null($channelKey)) {
             $channelKey = $this->selectedChannel;
         }
+
         return Arr::get($this->listChannels(), $channelKey);
     }
 
     /**
      * Set default channels
      *
-     * @param array|null $defaultChannels
+     * @param  array|null  $defaultChannels
      * @return array
-    */
+     */
     public function setDefaultChannels($defaultChannels = [])
     {
         if (empty($defaultChannels)) {
             return $this->listDefaultChannels();
         }
+
         return $defaultChannels;
     }
 
     /**
      * Set channels notification
      *
-     * @param array $channels
+     * @param  array  $channels
      * @return self
-    */
+     */
     public function setChannels($channels)
     {
         $this->notifChannels = $this->getAliasChannel($channels);
+
         return $this;
     }
 
     /**
      * Set channels with mandatory channels
      *
-     * @param array|null $notifChannels
+     * @param  array|null  $notifChannels
      * @return self
-    */
+     */
     public function setChannelsWithMandatory($notifChannels = [])
     {
         if (empty($notifChannels)) {
@@ -114,6 +119,7 @@ trait HasChannels
         }
 
         $this->setChannels($notifChannels);
+
         return $this;
     }
 
@@ -127,20 +133,21 @@ trait HasChannels
         $channels = $this->listChannels();
         foreach ($channels as $key => $channel) {
             $channelValue = str_replace(' ', '', ucwords($channel['value']));
-            $methodName = 'init' . $channelValue;
-            if(method_exists($this, $methodName)) {
+            $methodName = 'init'.$channelValue;
+            if (method_exists($this, $methodName)) {
                 $this->{$methodName}();
             }
         }
+
         return $this;
     }
 
     /**
      * Merge channels with mandatory channels.
      *
-     * @param array|null $selectedChannels
+     * @param  array|null  $selectedChannels
      * @return array $allowedChannels
-    */
+     */
     public function mergeWithMandatoryChannel($selectedChannels = [])
     {
         if (empty($selectedChannels)) {
@@ -154,7 +161,7 @@ trait HasChannels
      * Convert channel in database into class channel notification
      *
      * @return array
-    */
+     */
     public function getAliasChannel($channels = [])
     {
         if (empty($channels)) {
@@ -163,26 +170,28 @@ trait HasChannels
 
         $result = [];
         foreach ($channels as $key => $channel) {
-            if (!Arr::has($this->listAliasChannels(), $channel)) {
+            if (! Arr::has($this->listAliasChannels(), $channel)) {
                 continue;
             }
 
             $result[] = Arr::get($this->listAliasChannels(), $channel);
         }
+
         return $result;
     }
 
     /**
      * Is notif via channel ?
      *
-     * @param string $channelName
+     * @param  string  $channelName
      * @return bool
-    */
+     */
     public function isNotifVia($channelName)
     {
         if (empty($this->notifChannels)) {
             return false;
         }
+
         return in_array($channelName, $this->notifChannels);
     }
 

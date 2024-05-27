@@ -7,17 +7,19 @@ use Illuminate\Support\Arr;
 trait HasUTMTrait
 {
     protected $utm = [];
+
     protected $enableUTM = true;
 
     /**
      * Enable UTM into notification
      *
-     * @param boolean $toggle
+     * @param  bool  $toggle
      * @return self
      */
     public function enableUTM($toggle = true)
     {
         $this->enableUTM = $toggle;
+
         return $this;
     }
 
@@ -29,12 +31,12 @@ trait HasUTMTrait
      *      'value' => 'email'
      * ]
      *
-     * @param array $utm
      * @return self
      */
     public function setUTM(array $utm)
     {
         $this->utm = $utm;
+
         return $this;
     }
 
@@ -42,7 +44,7 @@ trait HasUTMTrait
      * Get UTM
      *
      * @return array
-    */
+     */
     public function getUTM()
     {
         $utmResult = $this->getDefaultUTM($this->selectedChannel);
@@ -57,7 +59,7 @@ trait HasUTMTrait
     }
 
     /**
-     * @param array $datas
+     * @param  array  $datas
      * @return array
      */
     private function cleanUTM($datas)
@@ -66,24 +68,25 @@ trait HasUTMTrait
         $result = collect($datas);
         $duplicates = $datas->duplicates('key')->values()->toArray();
 
-        if(!empty($duplicates)){
+        if (! empty($duplicates)) {
             $result = collect($datas->whereNotIn('key', $duplicates)->toArray());
 
             foreach ($duplicates as $key => $duplicateKey) {
-                $last = $datas->last(function ($value, $key) use($duplicateKey) {
+                $last = $datas->last(function ($value, $key) use ($duplicateKey) {
                     return $value['key'] === $duplicateKey;
                 });
                 $result->push($last);
             }
         }
+
         return $result->toArray();
     }
 
     private function buildUTM($utm)
     {
-        return array_map(function($utm){
+        return array_map(function ($utm) {
             return array_merge($utm, [
-                'key' => 'utm_' . $utm['key']
+                'key' => 'utm_'.$utm['key'],
             ]);
         }, $utm);
     }
@@ -92,12 +95,14 @@ trait HasUTMTrait
      * Get default UTM config for notification
      *
      * @return array
-    */
+     */
     public function getDefaultUTM($channelKey)
     {
         $channels = $this->listChannels();
         $channel = Arr::get($channels, $channelKey);
-        if(empty($channel))return [];
+        if (empty($channel)) {
+            return [];
+        }
 
         return Arr::get($channel, 'utm', []);
     }
@@ -106,11 +111,13 @@ trait HasUTMTrait
      * Get UTM config for notification as key value
      *
      * @return array
-    */
+     */
     public function getUTMAsKeyValue()
     {
         $utm = $this->getUTM();
-        if(empty($utm))return [];
+        if (empty($utm)) {
+            return [];
+        }
 
         return Arr::pluck($utm, 'value', 'key');
     }
@@ -119,11 +126,12 @@ trait HasUTMTrait
      * Get UTM config for notification as query string
      *
      * @return string
-    */
+     */
     public function getUTMAsQuery()
     {
         $utm = $this->getUTMAsKeyValue();
         $utm = Arr::query($utm);
+
         return $utm;
     }
 }

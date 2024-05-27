@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Arr;
 use Bagoesz21\LaravelNotification\Config\NotifConfigBuilder;
 
 /*
@@ -27,7 +26,7 @@ $defaultQueueConnection = env('NOTIF_QUEUE_CONNECTION', env('QUEUE_CONNECTION', 
 $defaultUTM = [
     [
         'key' => 'source',
-        'value' => 'notification'
+        'value' => 'notification',
     ],
 ];
 $defaultChannel = [
@@ -42,95 +41,95 @@ $defaultChannel = [
     'queue_connection' => $defaultQueueConnection,
     'delay' => null, //in minutes
     'icon' => 'mdi-bell',
-    'utm' => $defaultUTM
+    'utm' => $defaultUTM,
 ];
 
 $channels = [
     'database' => [
-        'enabled'       => true,
-        'name'          => 'Database',
-        'value'         => 'database',
-        'class'         => 'database',
-        'mandatory'     => true,
-        'icon'          => 'mdi-database',
-        'utm'           => array_merge_recursive($defaultUTM, [
+        'enabled' => true,
+        'name' => 'Database',
+        'value' => 'database',
+        'class' => 'database',
+        'mandatory' => true,
+        'icon' => 'mdi-database',
+        'utm' => array_merge_recursive($defaultUTM, [
             [
                 'key' => 'medium',
-                'value' => 'database'
+                'value' => 'database',
             ],
-        ])
+        ]),
     ],
     'broadcast' => [
-        'enabled'       => true,
-        'name'          => 'Realtime',
-        'value'         => 'broadcast',
-        'default'       => true,
-        'class'         => 'broadcast',
-        'icon'          => 'mdi-broadcast',
-        'utm'           => false
+        'enabled' => true,
+        'name' => 'Realtime',
+        'value' => 'broadcast',
+        'default' => true,
+        'class' => 'broadcast',
+        'icon' => 'mdi-broadcast',
+        'utm' => false,
     ],
     'mail' => [
-        'enabled'       => true,
-        'name'          => 'E-mail',
-        'value'         => 'mail',
-        'class'         => 'mail',
-        'icon'          => 'mdi-email',
-        'mailer'        => env('MAIL_MAILER', 'smtp'),
-        'utm'           => array_merge_recursive($defaultUTM, [
+        'enabled' => true,
+        'name' => 'E-mail',
+        'value' => 'mail',
+        'class' => 'mail',
+        'icon' => 'mdi-email',
+        'mailer' => env('MAIL_MAILER', 'smtp'),
+        'utm' => array_merge_recursive($defaultUTM, [
             [
                 'key' => 'medium',
-                'value' => 'email'
+                'value' => 'email',
             ],
-        ])
+        ]),
     ],
     'web push' => [
-        'name'          => 'Web Push',
-        'value'         => 'web push',
-        'class'         => \NotificationChannels\WebPush\WebPushChannel::class,
+        'name' => 'Web Push',
+        'value' => 'web push',
+        'class' => \NotificationChannels\WebPush\WebPushChannel::class,
     ],
     'one signal' => [
-        'enabled'       => true,
-        'name'          => 'One Signal',
-        'value'         => 'one signal',
-        'class'         => \NotificationChannels\OneSignal\OneSignalChannel::class,
-        'icon'          => 'mdi-broadcast',
+        'enabled' => true,
+        'name' => 'One Signal',
+        'value' => 'one signal',
+        'class' => \NotificationChannels\OneSignal\OneSignalChannel::class,
+        'icon' => 'mdi-broadcast',
     ],
     'pusher' => [
-        'name'          => 'Pusher',
-        'value'         => 'pusher',
-        'class'         => \NotificationChannels\PusherPushNotifications\PusherChannel::class,
+        'name' => 'Pusher',
+        'value' => 'pusher',
+        'class' => \NotificationChannels\PusherPushNotifications\PusherChannel::class,
     ],
     'fcm' => [
-        'name'          => 'Firebase Cloud Messaging',
-        'value'         => 'fcm',
-        'class'         => \NotificationChannels\Fcm\FcmChannel::class,
-        'icon'          => 'mdi-firebase',
+        'name' => 'Firebase Cloud Messaging',
+        'value' => 'fcm',
+        'class' => \NotificationChannels\Fcm\FcmChannel::class,
+        'icon' => 'mdi-firebase',
     ],
     'telegram' => [
-        'name'          => 'Telegram',
-        'value'         => 'telegram',
-        'class'         => \NotificationChannels\Telegram\TelegramChannel::class,
+        'name' => 'Telegram',
+        'value' => 'telegram',
+        'class' => \NotificationChannels\Telegram\TelegramChannel::class,
     ],
     'twilio' => [
-        'name'          => 'Twilio',
-        'value'         => 'twilio',
-        'class'         => \NotificationChannels\Twilio\TwilioChannel::class,
+        'name' => 'Twilio',
+        'value' => 'twilio',
+        'class' => \NotificationChannels\Twilio\TwilioChannel::class,
     ],
     'authy' => [
-        'name'          => 'Authy',
-        'value'         => 'authy',
-        'class'         => \NotificationChannels\Authy\AuthyChannel::class,
+        'name' => 'Authy',
+        'value' => 'authy',
+        'class' => \NotificationChannels\Authy\AuthyChannel::class,
     ],
     'nexmo' => [
-        'name'          => 'Nexmo Vonage',
-        'value'         => 'nexmo',
-        'class'         => \Illuminate\Notifications\Channels\VonageSmsChannel::class,
+        'name' => 'Nexmo Vonage',
+        'value' => 'nexmo',
+        'class' => \Illuminate\Notifications\Channels\VonageSmsChannel::class,
     ],
     'webhook' => [
-        'name'          => 'Webhook',
-        'value'         => 'webhook',
-        'class'         => \NotificationChannels\Webhook\WebhookChannel::class,
-        'icon'          => 'mdi-webhook',
+        'name' => 'Webhook',
+        'value' => 'webhook',
+        'class' => \NotificationChannels\Webhook\WebhookChannel::class,
+        'icon' => 'mdi-webhook',
     ],
 ];
 
@@ -167,7 +166,7 @@ $others = [
              * Default null, for default table name
              */
             'table_name' => null,
-        ]
+        ],
     ],
 
     'notifications' => [
@@ -182,7 +181,7 @@ $others = [
         'enabled' => true,
         'map' => [
             'user' => 'App\Models\User',
-        ]
+        ],
     ],
 
     /**

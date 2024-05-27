@@ -22,10 +22,10 @@ trait OneSignalChannel
             ->setIcon(config('site.logo.original_short.url'));
 
         $actions = $this->getActions();
-        if(!empty($actions)){
+        if (! empty($actions)) {
             foreach ($actions as $key => $action) {
                 $channel = $channel->setWebButton(
-                    OneSignalWebButton::create('button-' . $key)
+                    OneSignalWebButton::create('button-'.$key)
                         ->text(Arr::get($action, 'title'))
                         ->icon(Arr::get($action, 'icon'))
                         ->url(Arr::get($action, 'url'))

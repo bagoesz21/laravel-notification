@@ -18,24 +18,25 @@ trait WebPushChannel
             ->title($this->getTitle())
             ->body($this->getMessageAsPlainText())
             ->image($this->getImageUrl());
-            // ->icon('/approved-icon.png')
-            // ->options(['TTL' => 1000])
-            // ->data(['id' => $notification->id])
-            // ->badge()
-            // ->dir()
-            // ->image()
-            // ->lang()
-            // ->renotify()
-            // ->requireInteraction()
-            // ->tag()
-            // ->vibrate()
+        // ->icon('/approved-icon.png')
+        // ->options(['TTL' => 1000])
+        // ->data(['id' => $notification->id])
+        // ->badge()
+        // ->dir()
+        // ->image()
+        // ->lang()
+        // ->renotify()
+        // ->requireInteraction()
+        // ->tag()
+        // ->vibrate()
 
         $actions = $this->getActions();
-        if(!empty($actions)){
+        if (! empty($actions)) {
             foreach ($actions as $key => $action) {
                 $channel = $channel->action(Arr::get($action, 'title'), '', Arr::get($action, 'icon'));
             }
         }
+
         return $channel;
     }
 }

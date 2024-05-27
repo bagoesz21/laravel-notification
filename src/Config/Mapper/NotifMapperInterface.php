@@ -6,8 +6,6 @@ interface NotifMapperInterface
 {
     /**
      * Get all config as array
-     *
-     * @return array
      */
     public function toArray(): array;
 }

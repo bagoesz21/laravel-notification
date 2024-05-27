@@ -1,4 +1,5 @@
 <?php
+
 namespace Bagoesz21\LaravelNotification\Config\Mapper;
 
 abstract class BaseNotifMapper implements NotifMapperInterface
@@ -10,8 +11,10 @@ abstract class BaseNotifMapper implements NotifMapperInterface
     /**
      * @return static
      */
-    public static function make(){
+    public static function make()
+    {
         $class = get_called_class();
-        return (new $class());
+
+        return new $class();
     }
 }

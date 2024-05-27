@@ -2,10 +2,10 @@
 
 namespace Bagoesz21\LaravelNotification\Models\Filters;
 
+use Bagoesz21\LaravelNotification\Models\Notification;
+use Bagoesz21\LaravelNotification\Models\NotificationSchedule;
 use EloquentFilter\ModelFilter;
 use Illuminate\Support\Arr;
-use Bagoesz21\LaravelNotification\Models\NotificationSchedule;
-use Bagoesz21\LaravelNotification\Models\Notification;
 
 class NotificationScheduleFilter extends ModelFilter
 {
@@ -44,6 +44,7 @@ class NotificationScheduleFilter extends ModelFilter
             default:
                 break;
         }
+
         return $this;
     }
 }

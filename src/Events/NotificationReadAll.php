@@ -3,7 +3,6 @@
 namespace Bagoesz21\LaravelNotification\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Queue\SerializesModels;
 
@@ -16,7 +15,7 @@ class NotificationReadAll implements ShouldBroadcast
     /**
      * Create a new event instance.
      *
-     * @param  int $userId
+     * @param  mixed  $user
      * @return void
      */
     public function __construct($user)
@@ -33,5 +32,6 @@ class NotificationReadAll implements ShouldBroadcast
      */
     public function broadcastOn()
     {
+        return [];
     }
 }

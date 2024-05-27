@@ -21,7 +21,7 @@ trait TelegramChannel
 
         $attachments = $this->getData('attachments');
 
-        if(!empty($attachments)){
+        if (! empty($attachments)) {
             foreach ($attachments as $key => $attachment) {
                 $type = Arr::get($attachment, 'type', 'file');
                 $filename = Arr::get($attachment, 'filename');
@@ -50,7 +50,7 @@ trait TelegramChannel
         }
 
         $actions = $this->getActions();
-        if(!empty($actions)){
+        if (! empty($actions)) {
             foreach ($actions as $key => $action) {
                 $channel = $channel->button(Arr::get($action, 'title'), Arr::get($action, 'url'));
             }

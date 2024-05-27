@@ -11,7 +11,7 @@ class NotificationScheduleResource extends BaseJsonResource
         $unserializeNotif = $this->unserialize_notification;
 
         $notifData = [];
-        if($unserializeNotif){
+        if ($unserializeNotif) {
             $renderer = new Renderer();
             $renderer->setContent($unserializeNotif->message);
             $message_html = $renderer->getHTML();
@@ -21,7 +21,7 @@ class NotificationScheduleResource extends BaseJsonResource
                 'title' => $unserializeNotif->title,
                 'message' => $unserializeNotif->message,
                 'message_html' => $message_html,
-                'action_url' => null
+                'action_url' => null,
             ];
         }
 

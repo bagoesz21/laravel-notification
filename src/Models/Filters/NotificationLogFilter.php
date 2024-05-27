@@ -2,9 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification\Models\Filters;
 
-use EloquentFilter\ModelFilter;
-use Illuminate\Support\Arr;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
+use EloquentFilter\ModelFilter;
 
 class NotificationLogFilter extends ModelFilter
 {
@@ -21,7 +20,8 @@ class NotificationLogFilter extends ModelFilter
         $this->model = NotifHelper::getNotifLogModelClass();
     }
 
-    private function getTableName(){
+    private function getTableName()
+    {
         return $this->model::getTableName();
     }
 }

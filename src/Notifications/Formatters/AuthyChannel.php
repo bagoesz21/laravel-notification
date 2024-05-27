@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use NotificationChannels\Authy\AuthyMessage;
 
 /**
@@ -12,7 +11,6 @@ use NotificationChannels\Authy\AuthyMessage;
  */
 trait AuthyChannel
 {
-
     public function toAuthy($notifiable)
     {
         $channel = AuthyMessage::create()->method('sms');

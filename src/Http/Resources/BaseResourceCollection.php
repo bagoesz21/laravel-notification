@@ -9,14 +9,13 @@ class BaseResourceCollection extends ResourceCollection
     protected $jsonResource;
 
     /**
-     * @param mixed $resource
-     * @param \Illuminate\Http\Resources\Json\JsonResource $jsonResource
+     * @param  mixed  $resource
+     * @param  \Illuminate\Http\Resources\Json\JsonResource  $jsonResource
      * @return void
      */
     public function __construct($resource, $jsonResource)
     {
         parent::__construct($resource);
-
 
         $this->jsonResource = $jsonResource;
         $this->resource = $this->collectResource($resource);
@@ -30,7 +29,7 @@ class BaseResourceCollection extends ResourceCollection
      */
     public function toArray($request)
     {
-        return  $this->collection->mapInto($this->jsonResource)->all();
+        return $this->collection->mapInto($this->jsonResource)->all();
 
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
-use Illuminate\Support\Arr;
 use NotificationChannels\Messagebird\MessagebirdMessage;
 
 /**
@@ -16,6 +15,7 @@ trait MessageBirdChannel
     {
         $channel = (new MessagebirdMessage($this->getMessageAsPlainText()));
         $channel = $channel->setReference($notifiable->id);
+
         return $channel;
     }
 }

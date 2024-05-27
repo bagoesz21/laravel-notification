@@ -12,28 +12,29 @@ class DefaultNotifMail extends Mailable implements ShouldQueue
     use Queueable, SerializesModels;
 
     public array $data = [];
+
     public $subject;
 
     /**
      * Create a new message instance.
      *
-     * @param array $data
-     * @param string $subject
+     * @param  string|null  $subject
      * @return void
      */
-    public function __construct(array $data = [])
+    public function __construct(array $data = [], $subject = null)
     {
         $this->setData($data);
         $this->subject = $subject ?? __('laravel-notification::notification.locale');
     }
 
     /**
-     * @param array $data
+     * @param  array  $data
      * @return self
      */
     public function setData($data)
     {
         $this->data = $data;
+
         return $this;
     }
 
@@ -45,6 +46,6 @@ class DefaultNotifMail extends Mailable implements ShouldQueue
     public function build()
     {
         return $this->markdown('laravel-notification::emails.default-notif-mail', array_merge([], $this->data))
-        ->subject($this->subject);
+            ->subject($this->subject);
     }
 }

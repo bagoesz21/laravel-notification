@@ -2,36 +2,38 @@
 
 namespace Bagoesz21\LaravelNotification\Models;
 
-use \Illuminate\Notifications\DatabaseNotification as Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Bagoesz21\LaravelNotification\Models\Collections\NotificationCollection;
-use EloquentFilter\Filterable;
-use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
 use Bagoesz21\LaravelNotification\Casts\JsonCast;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use Bagoesz21\LaravelNotification\Enums\NotificationLevel;
+use Bagoesz21\LaravelNotification\Models\Collections\NotificationCollection;
+use EloquentFilter\Filterable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\DatabaseNotification as Model;
 
 class Notification extends Model
 {
+    use Filterable;
     use HasFactory;
     use Traits\BaseModelTrait;
     use Traits\NotificationTrait;
-    use Filterable;
 
     public $timestamps = true;
+
     protected $guarded = [];
 
     protected $casts = [
         'data' => JsonCast::class,
-        'level' => NotificationLevel::class
+        'level' => NotificationLevel::class,
     ];
 
     public function getTable()
     {
         $tableName = NotifConfig::make()->get('tables.notification.table_name', null);
 
-        if(is_null($tableName)){
+        if (is_null($tableName)) {
             $tableName = parent::getTable();
         }
+
         return $tableName;
     }
 
@@ -40,27 +42,33 @@ class Notification extends Model
         return new NotificationCollection($models);
     }
 
-    public function getTypeTextAttribute(){
+    public function getTypeTextAttribute()
+    {
         return $this->readableNotificationType($this->type);
     }
 
-    public function getFormattedDataAttribute(){
+    public function getFormattedDataAttribute()
+    {
         return $this->readableNotificationData($this->data);
     }
 
-    public function getFormattedActionUrlAttribute(){
+    public function getFormattedActionUrlAttribute()
+    {
         return $this->readableActionUrlData();
     }
 
-    public function getIsReadAttribute(){
-        return !empty($this->read_at) ? true : false;
+    public function getIsReadAttribute()
+    {
+        return ! empty($this->read_at) ? true : false;
     }
 
-    public function getMessageHtmlAttribute(){
+    public function getMessageHtmlAttribute()
+    {
         return $this->proseMirrorToHTML($this->message);
     }
 
-    public function getMessageHtmlLazyImgAttribute(){
+    public function getMessageHtmlLazyImgAttribute()
+    {
         return $this->proseMirrorToHTML($this->message, true);
     }
 

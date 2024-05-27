@@ -2,9 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\App;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
+use Illuminate\Support\Facades\App;
 
 class LaravelNotification
 {
@@ -17,7 +16,7 @@ class LaravelNotification
      */
     public static function make()
     {
-        return (new self());
+        return new self();
     }
 
     public function __construct()
@@ -30,13 +29,13 @@ class LaravelNotification
     public function init()
     {
         $this->morphMap();
-        App::instance(\Illuminate\Notifications\Channels\DatabaseChannel::class, new
-        Channels\DatabaseChannel());
+        App::instance(\Illuminate\Notifications\Channels\DatabaseChannel::class, new Channels\DatabaseChannel());
     }
 
     public function setMapper($mapper)
     {
         $this->mapper = app($mapper);
+
         return $this;
     }
 
@@ -45,7 +44,10 @@ class LaravelNotification
      */
     public function morphMap()
     {
-        if(!$this->config->get('morph.enabled'))return [];
+        if (! $this->config->get('morph.enabled')) {
+            return [];
+        }
+
         return \Illuminate\Database\Eloquent\Relations\Relation::enforceMorphMap($this->config->get('morph.map'));
     }
 
@@ -79,12 +81,12 @@ class LaravelNotification
     }
 
     /**
-     * @param string $notifKey
+     * @param  string  $notifKey
      * @return \Bagoesz21\LaravelNotification\Models\Notification
      */
     public function notifClass($notifKey = 'system')
     {
         return app($this->config->get("notifications.$notifKey"),
-        $this->config->get("notifications.system"));
+            $this->config->get('notifications.system'));
     }
 }

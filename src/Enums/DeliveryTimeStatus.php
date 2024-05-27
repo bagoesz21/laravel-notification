@@ -2,31 +2,23 @@
 
 namespace Bagoesz21\LaravelNotification\Enums;
 
-use BenSampo\Enum\Contracts\LocalizedEnum;
-
-final class DeliveryTimeStatus extends BaseEnum implements LocalizedEnum
+enum DeliveryTimeStatus: int implements Traits\HasColor
 {
-    const IMMEDIATELY = 0;
-    const SCHEDULE = 1;
+    use BaseEnumTrait;
 
-    public static function colors(): array
-    {
-        return [
-            self::IMMEDIATELY => 'red',
-            self::SCHEDULE => 'green',
-        ];
-    }
+    case IMMEDIATELY = 0;
+    case SCHEDULE = 1;
 
-    public static function icons(): array
-    {
-        return [
-            self::IMMEDIATELY => 'mdi-alarm-check',
-            self::SCHEDULE => 'mdi-alarm-snooze',
-        ];
-    }
-
-    public static function getDefaultValue()
+    public static function getDefaultValue(): self
     {
         return self::IMMEDIATELY;
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::IMMEDIATELY => 'green',
+            self::SCHEDULE => 'red',
+        };
     }
 }
