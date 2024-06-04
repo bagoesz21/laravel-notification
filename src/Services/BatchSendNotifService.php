@@ -3,9 +3,9 @@
 namespace Bagoesz21\LaravelNotification\Services;
 
 use App\Models\User;
-use App\Services\Alert\AlertResponse;
 use Bagoesz21\LaravelNotification\Config\NotifConfig;
 use Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus;
+use Bagoesz21\LaravelNotification\Helpers\Helper;
 use Bagoesz21\LaravelNotification\Jobs\BatchNotifJob;
 use Carbon\Carbon;
 use Illuminate\Bus\Batch;
@@ -35,7 +35,7 @@ class BatchSendNotifService
 
     protected $enableLog = true;
 
-    /** @var \Illuminate\Bus\PendingBatch */
+    /** @var \Illuminate\Bus\Batch */
     protected $batch;
 
     protected $chunkLimit = 1000;
@@ -45,8 +45,6 @@ class BatchSendNotifService
      */
     public function __construct()
     {
-        $this->response = new AlertResponse;
-
         $this->enableLog = App::environment('production') ? true : false;
 
         $this->notifConfig = NotifConfig::make();
@@ -136,9 +134,7 @@ class BatchSendNotifService
      */
     public function setNotification(LaravelNotification $notification)
     {
-        if (! ($notification instanceof LaravelNotification)) {
-            throw new \Exception('Notification not instance of laravel notification.');
-        }
+        $this->isInstanceOfNotif($notification);
 
         $this->laravelNotification = $notification;
 
@@ -146,18 +142,46 @@ class BatchSendNotifService
     }
 
     /**
+     * @return void
+     *
+     * @throws \Exception
+     */
+    protected function isInstanceOfNotif(LaravelNotification $notification)
+    {
+        if (! ($notification instanceof LaravelNotification)) {
+            throw new \Exception('Notification not instance of laravel notification.');
+        }
+    }
+
+    /**
+     * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $val
+     * @return void
+     *
+     * @throws \Exception
+     */
+    public function isInstanceOfQuery($val)
+    {
+        if (! ($val instanceof \Illuminate\Database\Query\Builder)) {
+            throw new \Exception('Query user not instance of query builder.');
+        }
+
+        if (! ($val instanceof \Illuminate\Database\Eloquent\Builder)) {
+            throw new \Exception('Query user not instance of eloquent builder.');
+        }
+    }
+
+    /**
      * Notif to user
      *
      * @param  \Illuminate\Database\Query\Builder|\Illuminate\Database\Eloquent\Builder  $users
      * @return self
+     *
+     * @throws \Exception
      */
     public function setUsers($users)
     {
-        if (
-            ! ($users instanceof \Illuminate\Database\Query\Builder || $users instanceof \Illuminate\Database\Eloquent\Builder)
-        ) {
-            throw new \Exception('Query user not instance of query/eloquent builder.');
-        }
+        $this->isInstanceOfQuery($users);
+
         $this->builderUsers = $users;
 
         return $this;
@@ -179,21 +203,15 @@ class BatchSendNotifService
     /**
      * Send batch notif to user
      *
-     * @return array
+     * @return void
+     *
+     * @throws \Exception
      */
     public function send()
     {
-        if (
-            ! (
-                $this->builderUsers instanceof \Illuminate\Database\Query\Builder ||
-                $this->builderUsers instanceof \Illuminate\Database\Eloquent\Builder)
-        ) {
-            throw new \Exception('Query user not instance of query/eloquent builder.');
-        }
+        $this->isInstanceOfQuery($this->builderUsers);
 
-        if (! ($this->laravelNotification instanceof LaravelNotification)) {
-            throw new \Exception('Notification not instance of laravel notification.');
-        }
+        $this->isInstanceOfNotif($this->laravelNotification);
 
         try {
             $users = $this->builderUsers->select(['users.id', 'email', 'name']);
@@ -206,21 +224,14 @@ class BatchSendNotifService
             $deliveryTimeStatus = $this->getDeliveryTimeStatus();
             $deliveryAt = $this->getDeliveryAt();
 
-            if ($deliveryTimeStatus->is(DeliveryTimeStatus::SCHEDULE)) {
+            if ($deliveryTimeStatus == DeliveryTimeStatus::SCHEDULE) {
                 $message = 'Notifikasi dijadwal kirim pada '.$deliveryAt->translatedFormat('l, d F Y H:i');
             } else {
                 $message = 'Notifikasi sedang proses dikirim';
             }
-
-            $this->response->alert->info($message);
-
-            $this->response->setStatus(true);
         } catch (\Throwable $th) {
-            $this->response->setStatus(false);
-            $this->response->logError($th);
+            Helper::logError($th);
         }
-
-        return $this->response->toArray();
     }
 
     /**
@@ -299,7 +310,7 @@ class BatchSendNotifService
     /**
      * Get delivery time status
      *
-     * @return \App\Enums\DeliveryTimeStatus
+     * @return \Bagoesz21\LaravelNotification\Enums\DeliveryTimeStatus
      **/
     public function getDeliveryTimeStatus()
     {

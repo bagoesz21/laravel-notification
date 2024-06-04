@@ -2,6 +2,8 @@
 
 namespace Bagoesz21\LaravelNotification\Helpers;
 
+use Illuminate\Support\Facades\Log;
+
 class Helper
 {
     /**
@@ -59,5 +61,27 @@ class Helper
         }
 
         return $result;
+    }
+
+    /**
+     * Log Error
+     *
+     * @return string
+     **/
+    public static function logError(\Throwable $th)
+    {
+        Log::error($th->getMessage(), ['trace' => $th->getTraceAsString()]);
+
+        $error = $th->getMessage();
+        if (config('app.debug')) {
+            $arrayTrace = explode("\n", $th->getTraceAsString());
+            $arrayTrace = array_slice($arrayTrace, 0, 10);
+            $trace = implode('<br>', $arrayTrace);
+            $trace = str_replace(base_path(), '', $trace);
+
+            $error .= '<br>Trace:<br>'.$trace;
+        }
+
+        return $error;
     }
 }

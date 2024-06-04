@@ -62,7 +62,7 @@ trait MailChannel
      * Get the mail representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return Mailable
+     * @return static
      */
     public function toMail($notifiable)
     {

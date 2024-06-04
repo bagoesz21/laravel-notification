@@ -15,12 +15,10 @@ trait FCMChannel
 {
     public function toFcm($notifiable)
     {
-        return FcmMessage::create()
-            // ->setData([])
-            ->setNotification(FcmNotification::create()
-                ->setTitle($this->getTitle())
-                ->setBody($this->getMessageAsPlainText())
-                ->setImage($this->getImageUrl())
-            );
+        return new FcmMessage(notification: new FcmNotification(
+            title: $this->getTitle(),
+            body: $this->getMessageAsPlainText(),
+            //image: $this->getImageUrl()
+        ));
     }
 }

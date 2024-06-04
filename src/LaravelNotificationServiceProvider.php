@@ -107,8 +107,6 @@ class LaravelNotificationServiceProvider extends ServiceProvider
 
     /**
      * Returns existing migration file if found, else uses the current timestamp.
-     *
-     * @return void
      */
     protected function getMigrationFileName($migrationFileName): string
     {

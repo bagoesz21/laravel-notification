@@ -27,7 +27,7 @@ class BaseActionNotification
      *
      * @param  string  $url
      * @param  string|null  $title
-     * @return static
+     * @return self
      */
     public static function create($url, $title = null)
     {
