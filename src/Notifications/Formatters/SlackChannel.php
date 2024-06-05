@@ -3,6 +3,7 @@
 namespace Bagoesz21\LaravelNotification\Notifications\Formatters;
 
 use Illuminate\Notifications\Messages\SlackMessage;
+use Illuminate\Notifications\Slack\BlockKit\Blocks\ActionsBlock;
 use Illuminate\Support\Arr;
 
 /**
@@ -46,6 +47,16 @@ trait SlackChannel
                     ]);
                 });
             }
+        }
+
+        $actions = $this->getActions();
+        if (! empty($actions)) {
+            $channel = $channel->actionsBlock(function (ActionsBlock $block) use ($actions) {
+
+                foreach ($actions as $key => $action) {
+                    $block->button($action['title']);
+                }
+            });
         }
 
     }

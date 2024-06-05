@@ -3,12 +3,27 @@
 namespace Bagoesz21\LaravelNotification\Models\Traits;
 
 use App\Models\User;
-use App\Services\ProseMirror\Renderer;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 trait NotificationTrait
 {
+    public function messageParser($message = null)
+    {
+        return NotifHelper::messageParser()->setMessage($message);
+    }
+
+    public function messageParserToText($message = null)
+    {
+        return $this->messageParser($message)->toText();
+    }
+
+    public function messageParserToHtml($message = null)
+    {
+        return $this->messageParser($message)->toHtml();
+    }
+
     public static function listNotificationType()
     {
         $result = [
@@ -91,36 +106,12 @@ trait NotificationTrait
 
         $data->message_html = '';
         if (! empty($data->message)) {
-            $data->message_html = $this->proseMirrorToHTML($data->message);
+            $data->message_html = $this->messageParserToHtml($data->message);
         }
         $data->action_url = $this->readableActionUrlData();
         $data->actions = $this->readableActionsData();
 
         return $data;
-    }
-
-    /**
-     * Convert prose mirror to HTML
-     *
-     * @param  string|null  $json
-     * @param  bool  $lazyImg
-     * @return string
-     */
-    public function proseMirrorToHTML($json, $lazyImg = false)
-    {
-        if (empty($json)) {
-            return '';
-        }
-
-        $renderer = new Renderer();
-
-        if (! $lazyImg) {
-            $renderer->addImageNotLazy();
-        }
-        $renderer->setContent($json);
-        $content = $renderer->getHTML();
-
-        return $content;
     }
 
     /**

@@ -55,7 +55,7 @@ class BaseNotification extends Notification implements ShouldQueue
      * @param  string|null  $message
      * @param  array|null  $data
      * @param  array|null  $notifChannels
-     * @return static
+     * @return self
      */
     public static function create($title = null, $message = null, $data = [], $notifChannels = [])
     {
@@ -243,7 +243,7 @@ class BaseNotification extends Notification implements ShouldQueue
         $this->setTitle($title)->setMessage($message)->setData($data)->setChannelsWithMandatory($notifChannels)->setLevel(NotificationLevel::INFO)->initChannel();
 
         // $this->afterInit();
-        // $this->setMessageToProseMirror();
+        // $this->setMessageToParse();
         return $this;
     }
 

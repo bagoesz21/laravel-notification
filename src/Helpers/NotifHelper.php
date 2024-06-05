@@ -33,6 +33,16 @@ class NotifHelper
         return LaravelNotification::make()->notifClass();
     }
 
+    public static function messageParser()
+    {
+        return LaravelNotification::make()->messageParser();
+    }
+
+    public static function messageParserToHtml($message = null)
+    {
+        return self::messageParser()->setMessage($message)->toHtml();
+    }
+
     /**
      * Send Notif immediately / schedule
      *

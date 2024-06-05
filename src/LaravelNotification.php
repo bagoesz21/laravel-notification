@@ -89,4 +89,9 @@ class LaravelNotification
         return app($this->config->get("notifications.$notifKey"),
             $this->config->get('notifications.system'));
     }
+
+    public function messageParser()
+    {
+        return app($this->config->get('message_parser'));
+    }
 }

@@ -45,7 +45,9 @@ trait HasRouteNotificationTrait
      */
     public function routeNotificationForFcm($notification)
     {
-        return $this->fcm_token;
+        $this->loadMissing(['devices']);
+
+        return $this->devices?->map(fn ($device) => $device->fcm_token)->toArray();
     }
 
     /**

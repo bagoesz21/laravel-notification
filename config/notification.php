@@ -191,6 +191,11 @@ $others = [
      * Default: load from config.
      */
     'mapper' => Bagoesz21\LaravelNotification\Config\Mapper\NotifMapperConfig::class,
+
+    /**
+     * parse message text before send to user
+     */
+    'message_parser' => Bagoesz21\LaravelNotification\Services\Message\MessageParser::class,
 ];
 
 return NotifConfigBuilder::make()

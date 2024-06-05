@@ -4,8 +4,10 @@ namespace Bagoesz21\LaravelNotification\Services;
 
 use Bagoesz21\LaravelNotification\Events\NotificationRead;
 use Bagoesz21\LaravelNotification\Events\NotificationReadAll;
+use Bagoesz21\LaravelNotification\Helpers\Helper;
 use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 use Illuminate\Notifications\Notification as LaravelNotification;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class NotificationService
@@ -31,14 +33,13 @@ class NotificationService
     }
 
     /**
-     * @param  \Illuminate\Support\Collection  $input
+     * @param  string|array  $id
      * @return bool
      */
-    public function markAsRead($input)
+    public function markAsRead($id)
     {
         $userID = Auth::id();
-        $notifID = $input->get('id');
-        $notifID = is_array($notifID) ? $notifID : [$notifID];
+        $notifID = Arr::wrap($id);
 
         $unread = $this->model::where('notifiable_id', $userID)
             ->whereNull('read_at')
@@ -62,10 +63,9 @@ class NotificationService
     }
 
     /**
-     * @param  \Illuminate\Support\Collection  $input
      * @return bool
      */
-    public function markAllRead($input)
+    public function markAllRead()
     {
         $userID = Auth::id();
 
@@ -75,13 +75,11 @@ class NotificationService
 
         $isUnread = ($unread > 0) ? true : false;
 
-        $msg = '';
         if ($isUnread) {
             $this->model::where('notifiable_id', $userID)
                 ->whereNull('read_at')
                 ->update(['read_at' => now()]);
 
-            $msg = 'Semua notif ditandai sudah dibaca';
             event(new NotificationReadAll(Auth::user()));
         }
 
@@ -111,7 +109,7 @@ class NotificationService
 
             $result = $batch->send();
         } catch (\Throwable $th) {
-            \Log::error($th);
+            Helper::logError($th);
         }
 
         return $result;
@@ -154,14 +152,13 @@ class NotificationService
     }
 
     /**
-     * @param  \Illuminate\Support\Collection  $input
+     * @param  string|array  $id
      * @return bool
      */
-    public function markAsUnRead($input)
+    public function markAsUnRead($id)
     {
         $userID = Auth::id();
-        $notifID = $input->get('id');
-        $notifID = is_array($notifID) ? $notifID : [$notifID];
+        $notifID = Arr::wrap($id);
 
         $readed = $this->model::where('notifiable_id', $userID)
             ->whereNotNull('read_at')
@@ -181,16 +178,15 @@ class NotificationService
     }
 
     /**
-     * @param  \Illuminate\Support\Collection  $input
+     * @param  string|array  $id
      * @return bool
      */
-    public function delete($input)
+    public function delete($id)
     {
         $userID = Auth::id();
-        $notifID = $input->get('id');
-        $notifID = is_array($notifID) ? $notifID : [$notifID];
+        $notifID = Arr::wrap($id);
 
-        $readed = $this->model::where('notifiable_id', $userID)
+        $this->model::where('notifiable_id', $userID)
             ->whereIn('id', $notifID)
             ->delete();
 

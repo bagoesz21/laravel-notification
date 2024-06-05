@@ -64,12 +64,12 @@ class Notification extends Model
 
     public function getMessageHtmlAttribute()
     {
-        return $this->proseMirrorToHTML($this->message);
+        return $this->messageParserToHtml($this->message);
     }
 
     public function getMessageHtmlLazyImgAttribute()
     {
-        return $this->proseMirrorToHTML($this->message, true);
+        return $this->messageParserToHtml($this->message, true);
     }
 
     public function modelFilter()

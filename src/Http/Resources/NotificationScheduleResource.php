@@ -2,7 +2,7 @@
 
 namespace Bagoesz21\LaravelNotification\Http\Resources;
 
-use App\Services\ProseMirror\Renderer;
+use Bagoesz21\LaravelNotification\Helpers\NotifHelper;
 
 class NotificationScheduleResource extends BaseJsonResource
 {
@@ -12,9 +12,7 @@ class NotificationScheduleResource extends BaseJsonResource
 
         $notifData = [];
         if ($unserializeNotif) {
-            $renderer = new Renderer();
-            $renderer->setContent($unserializeNotif->message);
-            $message_html = $renderer->getHTML();
+            $message_html = NotifHelper::messageParserToHtml($unserializeNotif->message);
 
             $notifData = [
                 'id' => null,

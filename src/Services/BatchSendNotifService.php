@@ -283,7 +283,7 @@ class BatchSendNotifService
         $users->cursor()
             ->map(function (User $user) use ($deliveryTimeStatus, $deliveryAt) {
                 return new BatchNotifJob($this->laravelNotification, $user,
-                    ($deliveryTimeStatus->is(DeliveryTimeStatus::SCHEDULE) ? $deliveryAt : null)
+                    ($deliveryTimeStatus == DeliveryTimeStatus::SCHEDULE ? $deliveryAt : null)
                 );
             })
             ->filter()
