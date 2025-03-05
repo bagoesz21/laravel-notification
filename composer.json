@@ -19,7 +19,7 @@
   ],
   "require": {
     "php": "^8.0",
-    "illuminate/support": "~9|~10|~11",
+    "illuminate/support": "~9|~10|~11|~12",
     "tucker-eric/eloquentfilter": "^3.4"
   },
   "require-dev": {
