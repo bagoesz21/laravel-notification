@@ -31,8 +31,8 @@ class CreateNotificationsTable extends Migration
             $table->string('title')->nullable();
             $table->json('message')->nullable();
 
-            $enums = collect(NotificationLevel::getAllAsArray())
-                ->map(fn($enum) => "{$enum['value']} = {$enum['description']}")
+            $enums = collect(NotificationLevel::toArray())
+                ->map(fn($enum) => "{$enum->value} = {$enum->name}")
                 ->join(', ');
             $table->tinyInteger('level')->nullable()->default(NotificationLevel::getDefaultValue())->comment($enums);
 
