@@ -57,27 +57,33 @@ class LaravelNotification
     }
 
     /**
-     * @return \Bagoesz21\LaravelNotification\Models\Notification
+     * @return \Bagoesz21\LaravelNotification\Models\Notification|null
      */
     public function notifModelClass()
     {
-        return app($this->config->get('tables.notification.models'));
+        $model = $this->config->get('tables.notification.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
-     * @return \Bagoesz21\LaravelNotification\Models\NotificationLog
+     * @return \Bagoesz21\LaravelNotification\Models\NotificationLog|null
      */
     public function notifLogModelClass()
     {
-        return app($this->config->get('tables.notification_log.models'));
+        $model = $this->config->get('tables.notification.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
-     * @return \Bagoesz21\LaravelNotification\Models\NotificationTemplate
+     * @return \Bagoesz21\LaravelNotification\Models\NotificationTemplate|null
      */
     public function notifTemplateModelClass()
     {
-        return app($this->config->get('tables.notification_template.models'));
+        $model = $this->config->get('tables.notification_template.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
