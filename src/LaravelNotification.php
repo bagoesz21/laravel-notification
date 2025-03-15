@@ -59,7 +59,9 @@ class LaravelNotification
      */
     public function notifModelClass()
     {
-        return app($this->config->get('tables.notification.models'));
+        $model = $this->config->get('tables.notification.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
@@ -67,7 +69,9 @@ class LaravelNotification
      */
     public function notifLogModelClass()
     {
-        return app($this->config->get('tables.notification_log.models'));
+        $model = $this->config->get('tables.notification_log.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
@@ -75,7 +79,9 @@ class LaravelNotification
      */
     public function notifTemplateModelClass()
     {
-        return app($this->config->get('tables.notification_template.models'));
+        $model = $this->config->get('tables.notification_template.model');
+        if(empty($model))return null;
+        return app($model);
     }
 
     /**
