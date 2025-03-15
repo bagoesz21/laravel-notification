@@ -71,7 +71,7 @@ class LaravelNotification
      */
     public function notifLogModelClass()
     {
-        $model = $this->config->get('tables.notification.model');
+        $model = $this->config->get('tables.notification_log.model');
         if(empty($model))return null;
         return app($model);
     }
