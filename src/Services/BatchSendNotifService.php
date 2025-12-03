@@ -161,12 +161,8 @@ class BatchSendNotifService
      */
     public function isInstanceOfQuery($val)
     {
-        if (! ($val instanceof \Illuminate\Database\Query\Builder)) {
-            throw new \Exception('Query user not instance of query builder.');
-        }
-
-        if (! ($val instanceof \Illuminate\Database\Eloquent\Builder)) {
-            throw new \Exception('Query user not instance of eloquent builder.');
+        if (! ($val instanceof \Illuminate\Database\Query\Builder) && ! ($val instanceof \Illuminate\Database\Eloquent\Builder) ) {
+            throw new \Exception('Query user not instance of query / eloquent builder.');
         }
     }
 
